@@ -319,7 +319,7 @@ return [
               ],
               [
                 'text' => 'Donaciones',
-                'icon' => 'fas fa-gift',
+                'icon' => 'fas fa-gifts',
                 'url'  => '/donaciones/Fecha',
               ],
             ],
