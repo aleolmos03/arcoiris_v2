@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'SGI-Arcoiris',
     'title_prefix' => '',
-    'title_postfix' => '',
+    'title_postfix' => '| SGI-Arcoiris',
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return [
     */
 
     'use_ico_only' => false,
-    'use_full_favicon' => false,
+    'use_full_favicon' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -45,12 +45,13 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>SGI</b>-Arcoiris',
+    'logo_img' => 'vendor/adminlte/dist/img/ArcoirisLogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
-    'logo_img_xl' => null,
-    'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'AdminLTE',
+    //'logo_img_xl' => 'vendor/adminlte/dist/img/ArcoirisLogo_full.png',
+    'logo_img_xl' => '',
+    'logo_img_xl_class' => 'brand-image-xl',
+    'logo_img_alt' => 'SGI-Arcoiris',
 
     /*
     |--------------------------------------------------------------------------
@@ -65,9 +66,9 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
-    'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
+    'usermenu_header' => true,
+    'usermenu_header_class' => 'bg-light',
+    'usermenu_image' => true,
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
 
@@ -227,97 +228,115 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
+            'text' => 'Nuevo',
+            'icon'    => 'fas fa-file-signature',
+            'topnav' => true,
+            'submenu' => [
+              [
+                'text' => 'Niño',
+                'icon'    => 'far fa-heart',
+                'icon_color' => 'red',
+                'url'  => '/ninio',
+              ],
+              [
+                'text' => 'Donación',
+                'icon'    => 'far fa-star',
+                'icon_color' => 'warning',
+                'url'  => '/donacion',
+              ],
+              [
+                'text' => 'Control',
+                'icon'    => 'far fa-check-circle',
+                'icon_color' => 'indigo',
+                'url'  => '/control',
+              ],
+              [
+                'text' => 'Evento',
+                'icon'    => 'far fa-calendar-plus',
+                'icon_color' => 'teal',
+                'url'  => '/evento',
+              ],
+              [
+                  'text' => 'Usuario',
+                  'icon'    => 'far fa-user',
+                  'icon_color' => 'info',
+                  'url'  => '/voluntario',
+              ],
+            ],
         ],
+        [
+            'text'    => 'Sistema',
+            'icon'    => 'fas fa-cogs',
+            'topnav'  => true,
+            'submenu' => [
+              [
+                'text' => 'Historial',
+                'icon' => 'fas fa-history',
+                'type' => 'submint',
+                'url'  => '/sistema/historial',
+              ],
+              [
+                'text' => 'Backups',
+                'icon' => 'fas fa-server',
+                'url'  => '/backups',
+              ],
+            ],
+          ],
+        //[
+        //    'type'         => 'navbar-search',
+        //    'text'         => 'search',
+        //    'topnav_right' => true,
+        //],
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
 
+
         // Sidebar items:
+        //[
+        //    'type' => 'sidebar-menu-search',
+        //    'text' => 'search',
+       // ],
         [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
-        [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
-        [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
+            'text'    => 'Niños',
+            'icon'    => 'fas fa-heartbeat',
             'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],
+            'label_color' => 'light',
+            'submenu' => [
+              [
+                'text' => 'Listado',
+                'icon' => 'far fa-file-alt',
+
+                'url'  => '/datos',
+
+              ],
+              [
+                'text' => 'Controles',
+                'icon' => 'fas fa-notes-medical',
+
+                'url'  => '/controles',
+              ],
+              [
+                'text' => 'Donaciones',
+                'icon' => 'fas fa-gift',
+                'url'  => '/donaciones/Fecha',
+              ],
+            ],
+          ],
+          [
+            'text'        => 'Usuarios',
+            'url'  => '/voluntarios',
+            'icon'        => 'fas fa-users',
+            'icon_color' => 'warning',
+          ],
+          [
+            'text'        => 'Agenda',
+            'url'         => '/agenda/Fecha',
+            'icon'        => 'far fa-calendar-alt',
+            'icon_color' => 'success',
+
+          ],
     ],
 
     /*
