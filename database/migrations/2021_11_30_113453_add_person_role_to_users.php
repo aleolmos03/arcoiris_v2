@@ -14,18 +14,6 @@ class AddPersonRoleToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('users', function (Blueprint $table) {
             $table->bigInteger('person_id')->unsigned();
             $table->tinyInteger('role_id')->unsigned();
             $table->string('phone1', 20)->nullable();
@@ -46,5 +34,15 @@ class AddPersonRoleToUsers extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('users');
     }
 }

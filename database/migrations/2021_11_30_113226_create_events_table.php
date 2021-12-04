@@ -17,7 +17,7 @@ class CreateEventsTable extends Migration
             $table->bigIncrements('id')->unique();
             $table->string('title');
             $table->text('description');
-            $table->dateTime('star_date');
+            $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->mediumInteger('maximum_capacity');
             $table->char('state', 1);
