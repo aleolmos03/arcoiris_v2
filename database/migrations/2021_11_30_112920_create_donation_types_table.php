@@ -14,8 +14,8 @@ class CreateDonationTypesTable extends Migration
     public function up()
     {
         Schema::create('donation_types', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->tinyIncrements('id')->unique();
+            $table->string('name');
         });
     }
 

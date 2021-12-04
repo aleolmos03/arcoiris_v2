@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    //public $timestamps = false;
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -45,4 +47,48 @@ class User extends Authenticatable
     {
         return 'https://picsum.photos/300/300';
     }
+
+    public function role()
+    {
+        //un usuario tiene un rol
+        return $this->hasMany(Role::class);
+    }
+
+    Public function logins()
+    {
+        // un usuario tiene muchos Login
+        return $this->hasMany(Login::class);
+    }
+
+    Public function backups()
+    {
+        // un usuario tiene muchos backup
+        return $this->hasMany(Backup::class);
+    }
+
+    Public function medical_controls()
+    {
+        // un usuario registra muchos medical_controls
+        return $this->hasMany(MedicalControl::class);
+    }
+
+    Public function donations()
+    {
+        // un usuario registra muchos donations
+        return $this->hasMany(Donation::class);
+    }
+
+    Public function Events()
+    {
+        // un usuario registra muchos eventos
+        return $this->hasMany(Event::class);
+    }
+
+    Public function people()
+    {
+        // un usuario registra muchos personas
+        return $this->hasMany(Person::class);
+    }
+
+
 }

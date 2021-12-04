@@ -14,8 +14,16 @@ class CreateCitiesTable extends Migration
     public function up()
     {
         Schema::create('cities', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->increments('id')->unique();
+            $table->string('name', 50);
+            $table->tinyInteger('province_id')->unsigned();
+            $table->integer('CP')->unsigned();
+
+
+            //Relation
+            $table->foreign('province_id')->references('id')->on('provinces')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

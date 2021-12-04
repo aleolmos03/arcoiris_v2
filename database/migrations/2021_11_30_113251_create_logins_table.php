@@ -14,8 +14,14 @@ class CreateLoginsTable extends Migration
     public function up()
     {
         Schema::create('logins', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->dateTime('created_at');
+            $table->bigInteger('created_by')->unsigned();
+
+            //Relation
+            $table->foreign('created_by')->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

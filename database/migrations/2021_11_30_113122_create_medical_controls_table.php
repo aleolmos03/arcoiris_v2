@@ -14,8 +14,23 @@ class CreateMedicalControlsTable extends Migration
     public function up()
     {
         Schema::create('medical_controls', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unique();
+            $table->dateTime('date');
+            $table->text('description');
+            $table->boolean('assistance');//Si|NO
             $table->timestamps();
+            $table->bigInteger('patient_id')->unsigned();
+            $table->bigInteger('created_by')->unsigned();
+
+            //Relation
+            $table->foreign('patient_id')
+                ->references('id')->on('patients')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('created_by')->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
