@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class DonationsTypesTableSeeder extends Seeder
+class EventTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
