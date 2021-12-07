@@ -13,6 +13,10 @@ class AddressesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+       //Creamos direccion Admin
+       \App\Models\Address::Create([
+        'address' => 'Administrador',
+        'city_id' =>1
+    ]);
     }
 }

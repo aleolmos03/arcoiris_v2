@@ -25,9 +25,7 @@ class CreatePeopleTable extends Migration
             $table->string('file',128)->nullable();//para subir las imagenes
             $table->tinyInteger('blood_type_id')->unsigned();
             $table->integer('address_id')->unsigned();
-
             $table->timestamps();
-
             $table->bigInteger('created_by')->unsigned();
 
             //Relation

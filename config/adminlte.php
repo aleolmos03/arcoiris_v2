@@ -69,8 +69,8 @@ return [
     'usermenu_header' => true,
     'usermenu_header_class' => 'bg-light',
     'usermenu_image' => true,
-    'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_desc' => true,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -260,7 +260,7 @@ return [
                   'text' => 'Usuario',
                   'icon'    => 'far fa-user',
                   'icon_color' => 'info',
-                  'url'  => '/voluntario',
+                  'url'  => '/usuario',
               ],
             ],
         ],
@@ -278,7 +278,7 @@ return [
               [
                 'text' => 'Backups',
                 'icon' => 'fas fa-server',
-                'url'  => '/backups',
+                'url'  => '/sistema/backups',
               ],
             ],
           ],

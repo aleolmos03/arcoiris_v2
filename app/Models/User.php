@@ -48,6 +48,21 @@ class User extends Authenticatable
         return 'https://picsum.photos/300/300';
     }
 
+    public function adminlte_desc()
+    {
+        $nombre_rol=Role::find(auth()->user()->role_id);
+        
+        //return  auth()->user()->role_id;
+        return $nombre_rol->name;
+    }
+
+    public function adminlte_profile_url()
+    {
+        return 'perfil/';
+    }
+
+
+
     public function role()
     {
         //un usuario tiene un rol
