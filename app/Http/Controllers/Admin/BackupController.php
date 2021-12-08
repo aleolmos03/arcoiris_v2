@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Backup;
 use Illuminate\Http\Request;
 
 class BackupController extends Controller
@@ -14,7 +15,22 @@ class BackupController extends Controller
      */
     public function index()
     {
-        //
+        $backups = Backup::join('users', 'backups.created_by', '=', 'users.id')
+        ->join('people', 'users.person_id', '=', 'people.id')
+        ->select(
+            'backups.id as id',
+            'backups.file_name as backup',
+            'backups.created_at as created_at',
+            'people.name as name',
+            'people.last_name as last_name',
+            'users.email as userName'
+        )
+        ->orderBy('id','DESC');
+
+        $total=$backups->count();
+        $backups=$backups->paginate(7);
+
+        return view('layouts.admin.Backups.index',compact('backups','total'));
     }
 
     /**

@@ -51,14 +51,27 @@ class User extends Authenticatable
     public function adminlte_desc()
     {
         $nombre_rol=Role::find(auth()->user()->role_id);
-        
-        //return  auth()->user()->role_id;
+
         return $nombre_rol->name;
     }
 
     public function adminlte_profile_url()
     {
         return 'perfil/';
+    }
+
+    public function user_name()
+    {
+        $nombre_rol=Person::find(auth()->user()->person_id);
+
+        return $nombre_rol->name;
+    }
+
+    public function user_last_name()
+    {
+        $nombre_rol=Person::find(auth()->user()->person_id);
+
+        return $nombre_rol->last_name;
     }
 
 
