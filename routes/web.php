@@ -21,14 +21,18 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+/*Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');*/
 
 //---Sistema---
-//Route::get('/backups',        'Admin\BackupController@index')->name('index');
-Route::get('/sistema/backups', [App\Http\Controllers\Admin\BackupController::class, 'index'])->name('index');
+Route::get('/backups', [App\Http\Controllers\Admin\BackupController::class, 'index'])->name('index');
+Route::post('/backups/crear', [App\Http\Controllers\Admin\BackupController::class,  'store']);
+
+//--History
+Route::get('historial/{filtro}', [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('index');
+

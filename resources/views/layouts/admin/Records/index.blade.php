@@ -11,7 +11,7 @@
       <div class="card-header">
         <h3 class="card-title">
           <i class="fas fa-history"></i>
-          Historial
+          Historial de Inicios de Sesión
         </h3>
       </div>
       <div class="card-body">
@@ -84,12 +84,10 @@
                       <table class="table table-hover">
                         <thead>
                           <tr>
-                            <th width="5%">Fecha</th>
-                            <th width="5%"></th>
-                            <th width="20%">Usuario</th>
-                            <th width="10%">rol</th>
-                            <th width="20%">Acción</th>
-                            <th width="5%">ID</th>
+                            <th width="25%">Fecha</th>
+                            <th width="25%">Usuario</th>
+                            <th width="25%">Nombre</th>
+                            <th width="25%">rol</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -99,25 +97,13 @@
                                     {{ \Carbon\Carbon::parse($his->created_at)->format('d/m/Y H:m:s')}}  <!--cambia formato fecha-->
                                 </td>
                                 <td class="py-3 align-middle">
-                                    @if($his->file)
-                                    <img src="{!! asset($his->file) !!}" class="direct-chat-img" alt="message user image">
-                                  @else
-                                    <img class="direct-chat-img" src="{!! asset("vendor/adminlte/dist/img/User_grey.png") !!}" alt="message user image">
-                                  @endif
+                                  {{ $his->email }}
                                 </td>
                                 <td class="py-3 align-middle">
-                                  {{ $his->name }} {{ $his->last_name }}
-                                  <br>
-                                  mail:  {{ $his->email }}
+                                    {{ $his->name }}, {{ $his->last_name }}
                                 </td>
                                 <td class="py-3 align-middle">
                                     {{ $his->role_name }}
-                                  </td>
-                                <td class="py-3 align-middle">
-                                    {{ $his->title }}
-                                </td>
-                                <td class="py-3 align-middle">
-                                    {{ $his->id }}
                                 </td>
                             </tr>
                           @endforeach
