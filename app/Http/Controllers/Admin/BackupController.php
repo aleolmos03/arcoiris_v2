@@ -15,6 +15,7 @@ class BackupController extends Controller
      */
     public function index()
     {
+        
         $backups = Backup::join('users', 'backups.created_by', '=', 'users.id')
         ->join('people', 'users.person_id', '=', 'people.id')
         ->select(

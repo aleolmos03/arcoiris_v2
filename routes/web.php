@@ -21,14 +21,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-/*Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');*/
-
 //---Sistema---
 Route::get('/backups', [App\Http\Controllers\Admin\BackupController::class, 'index'])->name('index');
 Route::post('/backups/crear', [App\Http\Controllers\Admin\BackupController::class,  'store']);
@@ -36,3 +28,11 @@ Route::post('/backups/crear', [App\Http\Controllers\Admin\BackupController::clas
 //--History
 Route::get('historial/{filtro}', [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('index');
 
+//---Profile---
+Route::get('/perfil', [App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('edit');
+Route::post('/perfil/editar',[App\Http\Controllers\Admin\ProfileController::class, 'update']);
+
+//---actualizar contraseña
+Route::get('/perfil/nuevo', [App\Http\Controllers\Admin\ProfileController::class, 'create'])->name('create');
+Route::post('/perfil/actualizar',[App\Http\Controllers\Admin\ProfileController::class, 'update_pass']);
+Route::post('/perfil/fin/{id}',[App\Http\Controllers\Admin\ProfileController::class, 'update_end']);

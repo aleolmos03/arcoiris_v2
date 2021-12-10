@@ -131,7 +131,7 @@
                                         <div class="col-sm-2">
                                             ID:
                                             <input type="number" class="form-control" title="id"
-                                                value={{ $perfil->pu_id }} disabled="">
+                                                value={{ auth()->user()->id }} disabled="">
                                         </div>
                                         <div class="col-sm-6">
                                             Mail:
