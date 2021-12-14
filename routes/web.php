@@ -26,7 +26,8 @@ Route::get('/backups', [App\Http\Controllers\Admin\BackupController::class, 'ind
 Route::post('/backups/crear', [App\Http\Controllers\Admin\BackupController::class,  'store']);
 
 //--History
-Route::get('historial/{filtro}', [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('index');
+//Route::get('historial/', [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('index');
+Route::get('/historial/{filtro}', [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('index');
 
 //---Profile---
 Route::get('/perfil', [App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('edit');
@@ -36,3 +37,8 @@ Route::post('/perfil/editar',[App\Http\Controllers\Admin\ProfileController::clas
 Route::get('/perfil/nuevo', [App\Http\Controllers\Admin\ProfileController::class, 'create'])->name('create');
 Route::post('/perfil/actualizar',[App\Http\Controllers\Admin\ProfileController::class, 'update_pass']);
 Route::post('/perfil/fin/{id}',[App\Http\Controllers\Admin\ProfileController::class, 'update_end']);
+
+//---Usuarios---
+Route::get('/usuarios', [App\Http\Controllers\Web\UserController::class, 'index'])->name('index');
+Route::get('/usuarios/{id}',[App\Http\Controllers\Web\UserController::class, 'show'])->name('show');
+

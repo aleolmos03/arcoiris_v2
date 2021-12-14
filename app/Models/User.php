@@ -45,10 +45,10 @@ class User extends Authenticatable
 
     public function adminlte_image()
     {
-        //$file=User::find(auth()->user()->id);
+        $file=Person::find(auth()->user()->person_id);
 
-        //return $file->file;
-        return 'https://picsum.photos/300/300';
+        return $file->file;
+        //return 'https://picsum.photos/300/300';
 
     }
 

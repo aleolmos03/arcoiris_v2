@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
+use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class ProfileController extends Controller
 {
@@ -107,9 +110,89 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        //carga los Id de cada tabla a actualizar
+        $join_perfil = User::where('users.id', auth()->id())
+        ->join('roles', 'users.role_id', 'roles.id')
+        ->join('people','users.person_id','people.id')
+        ->join('blood_types', 'people.blood_type_id', 'blood_types.id')
+        ->join('addresses', 'people.address_id', 'addresses.id')
+        ->join('cities', 'addresses.city_id', 'cities.id')
+        ->join('provinces', 'cities.province_id', 'provinces.id')
+        ->select(
+                'users.id as id',
+                'users.person_id as person_id',
+                'people.created_by as log_id', // info de quien modifica / crea
+                'people.address_id as address_id',
+                'addresses.city_id as city_id',
+                'cities.province_id as province_id',
+            )
+            ->first();
+
+        /*if ($request->pass == '1')
+         {
+         dd(Hash::check('plain-text', $hashedPassword));
+        }*/
+
+        if ($request->aceptar == '1') {
+            //Edita contraseña
+            $user = User::find($join_perfil->user_id);
+            $user->password = bcrypt('561-Arcoiris');
+            $user->save();
+        }
+
+        if ($request->guardar == '1') {
+
+            // Edita la dirreccion
+            $address = Address::find($join_perfil->address_id);
+            $address->address = $request->address;
+            $address->city_id = $request->city;
+            $address->save();
+
+            //Edita la persona
+            $person = Person::find($join_perfil->person_id);
+            $person->name = $request->name;
+            $person->last_name = $request->last_name;
+            $person->nick_name = $request->nick_name;
+            $person->DNI = $request->dni;
+            $person->date_of_birth = $request->date_of_birth;
+            $person->sex = $request->sex;
+            $person->blood_type_id = $request->tblood;
+            if ($request->sex == 'M') {
+                $person->file = "vendor/adminlte/dist/img/user1.jpg";
+            } else {
+                $person->file = "vendor/adminlte/dist/img/user2.jpg";
+            }
+            $person->created_by = auth()->id();
+            $person->save();
+
+            //Edita info Usuario
+            $user = User::find($join_perfil->id);
+            //$user->email = $request->email;
+            $user->phone1 = $request->phone1;
+            $user->phone2 = $request->phone2;
+            $user->mobile1 = $request->mobile1;
+            $user->mobile2 = $request->mobile2;
+            $user->occupation = $request->occupation;
+            $user->curriculum_vitae = $request->curriculum_vitae;
+            $user->start_activitiest = $request->start_activitiest;
+            $user->save();
+
+            //Edita info Usuario
+            //$user = User::find($join_perfil->user_id);
+            //$user->name = $request->dni;
+            //$user->email = $request->email;
+            //dd(Hash::check('561-Arcoiris',  $user->password));
+            //$user->save();*/
+
+            //Session::flash('message', 'Editado');
+            $url = substr(URL::previous(), 0, strlen(URL::previous()) - 5);
+
+            return redirect('/perfil'); //anda*/
+        }
+
+        return redirect('/perfil')->withInput(); // anda retora si encutra dni
     }
 
     /**

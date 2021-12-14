@@ -273,7 +273,7 @@ return [
                 'text' => 'Historial',
                 'icon' => 'fas fa-history',
                 'type' => 'submint',
-                'url'  => 'historial/Todo',
+                'url'  => '/historial/Todo',
               ],
               [
                 'text' => 'Backups',
@@ -326,7 +326,7 @@ return [
           ],
           [
             'text'        => 'Usuarios',
-            'url'  => '/voluntarios',
+            'url'  => '/usuarios',
             'icon'        => 'fas fa-users',
             'icon_color' => 'warning',
           ],

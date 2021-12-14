@@ -47,7 +47,6 @@ if (!function_exists('current_ID_name_Province')) {
     }
 }
 
-
 if (!function_exists('current_infoUser')) {
     //infotmacion competa del usuario de usuario activo
     function current_infoUser($id)
