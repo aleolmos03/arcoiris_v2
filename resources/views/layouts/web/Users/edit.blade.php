@@ -5,7 +5,7 @@
 @section('title_table', 'Info. Voluntario')
 
 @section('content')
-    <form method="POST" action="/voluntarios/info/{{ $voluntary->id }}/editar">
+    <form method="POST" action="/usuario/{{ $voluntary->id }}/actualizar">
         {!! csrf_field() !!}
         <div class="card card-info">
             <div class="card-header">
@@ -69,7 +69,7 @@
                                             Último Acceso:
                                         </span>
                                         <span class="text-muted">
-                                            {{ \Carbon\Carbon::parse($voluntary->updated_at)->format('d/m/Y H:i:s') }}
+                                            {{ \Carbon\Carbon::parse($log_date)->format('d/m/Y H:i:s') }} hs.
                                         </span>
                                     </p>
                                 </div>
@@ -213,8 +213,8 @@
                                                             @endif
                                                         @endforeach
                                                     @else
-                                                        @foreach (current_ID_name_City($voluntary->province) as $city)
-                                                            <option value="{{ $city->id }}" @if ($city->id == $voluntary->city) selected @endif> {{ $city->name }}
+                                                        @foreach (current_ID_name_City($voluntary->province_id) as $city)
+                                                            <option value="{{ $city->id }}" @if ($city->id == $voluntary->city_id) selected @endif> {{ $city->name }}
                                                             </option>
                                                         @endforeach
                                                     @endif
@@ -230,7 +230,7 @@
                                                             @if ($province->id==old('province'))
                                                             selected @endif>
                                                         @else
-                                                            @if ($province->id == $voluntary->province) selected
+                                                            @if ($province->id == $voluntary->province_id) selected
                                                             @endif>
                                                     @endif
                                                     {{ $province->name }}
@@ -246,7 +246,7 @@
                                         <div class="col-sm-3">
                                             Celular 1:
                                             <input name="mobile1" type="text" class="form-control" placeholder="Celular 1"
-                                                title="Celular 1" value="{{ $voluntary->mobile1 }}">
+                                                title="Celular 1" value="{{ $voluntary->mobile1 }}" required>
                                         </div>
                                         <div class="col-sm-3">
                                             Teléfono 1:

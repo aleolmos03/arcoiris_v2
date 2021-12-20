@@ -138,7 +138,7 @@ class ProfileController extends Controller
         if ($request->aceptar == '1') {
             //Edita contraseña
             $user = User::find($join_perfil->user_id);
-            $user->password = bcrypt('561-Arcoiris');
+            $user->password = bcrypt('561-Arcoiris');//poner DNI
             $user->save();
         }
 

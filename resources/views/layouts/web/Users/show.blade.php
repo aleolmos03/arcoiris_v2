@@ -19,7 +19,8 @@
                         @else
                             Modificado por
                         @endif
-                        {{ current_infoUser($voluntary->user_id)->name }} {{ current_infoUser($voluntary->user_id)->last_name }}
+                        {{ current_infoUser($voluntary->created_by)->name }} {{ current_infoUser($voluntary->created_by)->last_name }} el
+                        {{ \Carbon\Carbon::parse($voluntary->updated_at)->format('d/m/Y H:i') }} hs.
                     </span>
                     @endif
                 </h3>
@@ -28,7 +29,7 @@
                         @if( auth()->user()->role_id == 1 && $voluntary->role_id >= 1 || auth()->user()->role_id == 2 && $voluntary->role_id > 2 )
                             @if (!$voluntary->end_activitiest)
                                 <button type="button" class="btn btn-tool" title="Editar">
-                                    <a href="/voluntarios/info/{{ $voluntary->id }}/edit" type="button"
+                                    <a href="/usuario/{{ $voluntary->id }}/editar" type="button"
                                         class="btn btn-tool bg-gradient-info btn-sm">
                                         <i class="far fa-edit"></i>
                                         &nbsp; Editar</a>
@@ -53,8 +54,8 @@
                         <!--endif-->
                     @endif
                     <button type="button" class="btn btn-tool">
-                        <a href="{{ $url_anterior }}" class="btn btn-tool bg-gradient-info btn-sm"><i
-                                class="fas fa-times"></i>
+                        <a href="{{ $url_anterior }}" class="btn btn-tool bg-gradient-info btn-sm">
+                            <i class="fas fa-times"></i>
                         </a>
                     </button>
                 </div>
@@ -107,7 +108,7 @@
                                             Último Acceso:
                                         </span>
                                         <span class="text-muted">
-                                            {{ \Carbon\Carbon::parse($voluntary->updated_at)->format('d/m/Y H:i:s') }}
+                                            {{ \Carbon\Carbon::parse($log_date)->format('d/m/Y H:i:s') }} hs.
                                         </span>
                                     </p>
                                 </div>
@@ -240,12 +241,18 @@
                                                 <select name="city" class="custom-select" disabled>
                                                     @if (old('province'))
                                                         @foreach (current_ID_name_City(old('province')) as $city)
-                                                            <option value="{{ $city->id }}" @if ($city->id == old('city')) selected @endif> {{ $city->name }}
-                                                            </option>
+                                                            @if (old('province') == 6)
+                                                                <option value="{{ $city->id }}" @if ($city->id == 5806) selected @endif> {{ $city->name }}
+                                                                </option>
+                                                            @else
+                                                                <option value="{{ $city->id }}" @if ($city->id == old('city')) selected @endif>
+                                                                    {{ $city->name }}
+                                                                </option>
+                                                            @endif
                                                         @endforeach
                                                     @else
-                                                        @foreach (current_ID_name_City($voluntary->province) as $city)
-                                                            <option value="{{ $city->id }}" @if ($city->id == $voluntary->city) selected @endif> {{ $city->name }}
+                                                        @foreach (current_ID_name_City($voluntary->province_id) as $city)
+                                                            <option value="{{ $city->id }}" @if ($city->id == $voluntary->city_id) selected @endif> {{ $city->name }}
                                                             </option>
                                                         @endforeach
                                                     @endif
@@ -255,17 +262,17 @@
                                         <div class="col-sm-3">
                                             Provincia:
                                             <div class="input-group">
-                                                <select onchange="this.form.submit()" name="province"
-                                                    class="custom-select" disabled>
+                                                <select onchange="this.form.submit()" name="province" class="custom-select" disabled>
                                                     @foreach (current_ID_name_Province() as $province)
-                                                        <option value="{{ $province->id }}"
-                                                            @if (old('province'))
-                                                                @if ($province->id == old('province')) selected @endif>
-                                                            @else
-                                                                @if ($province->id == $voluntary->province) selected @endif>
-                                                            @endif
-                                                            {{ $province->name }}
-                                                        </option>
+                                                        <option value="{{ $province->id }}" @if (old('province'))
+                                                            @if ($province->id==old('province'))
+                                                            selected @endif>
+                                                        @else
+                                                            @if ($province->id == $voluntary->province_id) selected
+                                                            @endif>
+                                                    @endif
+                                                    {{ $province->name }}
+                                                    </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -338,7 +345,7 @@
                 </div>
             </div>
     </form>
-    <form method="POST" action="/voluntarios/info/{{ $voluntary->id }}/fin">
+    <form method="POST" action="/usuario/{{ $voluntary->id }}/fin">
         {!! csrf_field() !!}
         </div>
         <!-- /.modal -->

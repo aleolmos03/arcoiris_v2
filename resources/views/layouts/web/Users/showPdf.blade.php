@@ -134,7 +134,7 @@
           {{ now()->format('d/m/Y H:i:s') }}
         </p>
         <p class="contenido">
-          Usuario: {{ current_dataUser()->name }} {{ current_dataUser()->last_name }}
+          Usuario: {{ App\Models\User::user_name()  }} {{ App\Models\User::user_last_name() }}
         </p>
       </td>
     </tr>

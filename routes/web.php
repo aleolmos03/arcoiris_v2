@@ -35,10 +35,20 @@ Route::post('/perfil/editar',[App\Http\Controllers\Admin\ProfileController::clas
 
 //---actualizar contraseña
 Route::get('/perfil/nuevo', [App\Http\Controllers\Admin\ProfileController::class, 'create'])->name('create');
-Route::post('/perfil/actualizar',[App\Http\Controllers\Admin\ProfileController::class, 'update_pass']);
-Route::post('/perfil/fin/{id}',[App\Http\Controllers\Admin\ProfileController::class, 'update_end']);
+Route::post('/perfil/actualizar', [App\Http\Controllers\Admin\ProfileController::class, 'update_pass']);
+Route::post('/perfil/fin/{id}', [App\Http\Controllers\Admin\ProfileController::class, 'update_end']);
 
 //---Usuarios---
 Route::get('/usuarios', [App\Http\Controllers\Web\UserController::class, 'index'])->name('index');
-Route::get('/usuarios/{id}',[App\Http\Controllers\Web\UserController::class, 'show'])->name('show');
+Route::get('/usuario/{id}', [App\Http\Controllers\Web\UserController::class, 'show'])->name('show');
+
+Route::get('/usuario', [App\Http\Controllers\Web\UserController::class, 'create'])->name('create');
+Route::post('/usuario/crear', [App\Http\Controllers\Web\UserController::class, 'store']);
+
+Route::get('/usuario/{id}/editar', [App\Http\Controllers\Web\UserController::class, 'edit'])->name('edit');
+Route::post('/usuario/{id}/actualizar', [App\Http\Controllers\Web\UserController::class, 'update']);
+Route::post('/usuario/{id}/fin', [App\Http\Controllers\Web\UserController::class, 'update_end']);
+
+Route::get('/usuario/{id}/borrar', [App\Http\Controllers\Web\UserController::class, 'destroy'])->name('destroy');
+
 

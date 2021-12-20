@@ -2,6 +2,7 @@
 
 use App\Models\BloodType;
 use App\Models\City;
+use App\Models\Person;
 use App\Models\Province;
 use App\Models\Role;
 use App\Models\User;
@@ -15,8 +16,7 @@ if (!function_exists('current_roles')) {
     //id y name rol
     function current_roles()
     {
-        $rol = Role::get();
-        return $rol;
+        return Role::get();
     }
 }
 
@@ -24,8 +24,7 @@ if (!function_exists('current_tbloods')) {
     //id y name type blood
     function current_tbloods()
     {
-        $blood = BloodType::get();
-        return $blood;
+        return BloodType::get();
     }
 }
 
@@ -33,8 +32,7 @@ if (!function_exists('current_ID_name_City')) {
     //id y name Localidad
     function current_ID_name_City($id_prov)
     {
-        $cities = City::where('cities.province_id', $id_prov)->get();
-        return $cities;
+        return City::where('cities.province_id', $id_prov)->get();
     }
 }
 
@@ -42,8 +40,7 @@ if (!function_exists('current_ID_name_Province')) {
     //id y name provincia
     function current_ID_name_Province()
     {
-        $provinces = Province::get();
-        return $provinces;
+        return Province::get();
     }
 }
 
@@ -95,5 +92,13 @@ if (!function_exists('current_infoUser')) {
         } else {
             return 1;
         }
+    }
+}
+
+if (!function_exists('current_existeDni')) {
+    //Verifica DNI
+    function current_existeDni($dni)
+    {
+        return Person::where('DNI', $dni)->count();
     }
 }

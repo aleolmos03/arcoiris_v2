@@ -87,14 +87,14 @@
                             <th width="25%">Fecha</th>
                             <th width="25%">Usuario</th>
                             <th width="25%">Nombre</th>
-                            <th width="25%">rol</th>
+                            <th width="25%">Rol</th>
                           </tr>
                         </thead>
                         <tbody>
                           @foreach($history as $his)
                             <tr>
                                 <td class="py-3 align-middle">
-                                    {{ \Carbon\Carbon::parse($his->created_at)->format('d/m/Y H:m:s')}}  <!--cambia formato fecha-->
+                                    {{ \Carbon\Carbon::parse($his->created_at)->format('d/m/Y H:m:s')}} hs.<!--cambia formato fecha-->
                                 </td>
                                 <td class="py-3 align-middle">
                                   {{ $his->email }}

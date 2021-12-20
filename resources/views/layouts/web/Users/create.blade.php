@@ -1,17 +1,17 @@
 @extends('adminlte::page')
 
-@section('title', 'Nuevo Voluntario')
+@section('title', 'Nuevo Usuario')
 
-@section('title_table', 'Nuevo Voluntario')
+@section('title_table', 'Nuevo Usuario')
 
 @section('content')
-    <form method="POST" action="/voluntario/crear">
+    <form method="POST" action="/usuario/crear">
         {!! csrf_field() !!}
         <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="far fa-user"></i>&nbsp;
-                    Nuevo Voluntario
+                    Nuevo Usuario
                 </h3>
             </div>
             <div class="card-body">
@@ -78,7 +78,7 @@
                                         <div class="col-sm-8">
                                             Mail
                                             <input name="email" type="email" onchange="this.form.submit()"
-                                                class="form-control @if (current_existeMail(old('email'))) is-invalid @endif" placeholder="Mail" title="Mail"
+                                                class="form-control @if ( App\Models\User::user_mail_exist(old('email'))) is-invalid @endif" placeholder="Mail" title="Mail"
                                                 required value="{{ old('email') }}">
                                             <div class="invalid-feedback">
                                                 <strong>El Mail existe.</strong>
@@ -290,7 +290,7 @@
                     <div class="col-sm-6"></div>
                     <div class="col-sm-2">
                         <button name="guardar" type="submit" class="btn  btn-info btn-sm" value="1"
-                         @if (current_existeDni(old('dni'))|| current_existeMail(old('email'))) disabled @endif>
+                         @if (current_existeDni(old('dni'))|| App\Models\User::user_mail_exist(old('email'))) disabled @endif>
                             <i class="fas fa-check"></i> Guardar
                         </button>
                     </div>

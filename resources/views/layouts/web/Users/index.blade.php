@@ -218,8 +218,8 @@
                                                                 <strong>Mail:&nbsp;</strong>{{ $person->email }}
                                                                 <br>
                                                                 <strong>Celular:&nbsp;</strong>
-                                                                @if ($person->mobile)
-                                                                    {{ $person->mobile }}
+                                                                @if ($person->mobile1)
+                                                                    {{ $person->mobile1 }}
                                                                 @else
                                                                     &#126;
                                                                 @endif
@@ -238,7 +238,7 @@
                                                                 <!--cambia formato fecha-->
                                                             </td>
                                                             <td class="text-right py-0 align-middle">
-                                                                <a href="/voluntarios/info/{{ $person->id }}"
+                                                                <a href="/usuario/{{ $person->id }}"
                                                                     title="Ver detalles" class="text-muted">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </a>
