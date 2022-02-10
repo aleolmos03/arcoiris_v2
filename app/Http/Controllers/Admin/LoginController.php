@@ -55,9 +55,14 @@ class LoginController extends Controller
             $f_hasta =  $hoy->addWeek()->format('Y-m-d');
         }
 
-        $join_history = User::join('logins', 'users.id', '=', 'logins.created_by')
+        $join_history = Login::join('users','logins.created_by','users.id')
         ->join('roles', 'users.role_id', '=', 'roles.id')
         ->join('people', 'users.person_id', '=', 'people.id');
+
+
+        //$join_history = User::join('logins', 'users.id', '=', 'logins.created_by')
+        //->join('roles', 'users.role_id', '=', 'roles.id')
+        //->join('people', 'users.person_id', '=', 'people.id');
 
             /*if (is_numeric($f_buscar)) { // si es numero
                 if ($f_buscar < 999999) { // busca por ID
@@ -108,11 +113,14 @@ class LoginController extends Controller
             )
             ->orderBy('logins.id', 'DESC');
 
-            $total=$join_history->count();// cuenta los resultados encontrados
+            //dd($join_history->count());
 
-            $history=$join_history->paginate(7);
+            $total= $join_history->count();// cuenta los resultados encontrados
 
-            return view('layouts.admin.Records.index',compact('history','titulo','f_fecha','f_desde','f_hasta','f_buscar','filtro','total','exportar'));
+            $history= $join_history->paginate(7);
+
+            return view('layouts.admin.Logins.index',compact('history','titulo','f_fecha','f_desde','f_hasta','f_buscar','filtro','total','exportar'));
+
     }
 
     /**

@@ -108,7 +108,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="5%">
-                                                            ID
+                                                            Nº
                                                         </th>
                                                         <th width="5%"></th>
                                                         <th width="20%">
@@ -177,14 +177,16 @@
                                                                 </div>
                                                             </div>
                                                         </th>
+                                                        @if( auth()->user()->role_id != 3)
                                                         <th width="5%"></th>
+                                                        @endif
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($person_users as $person)
                                                         <tr>
                                                             <td class="py-0 align-middle">
-                                                                {{ $person->id }}
+                                                                {{ str_pad($person->id, 6, "0", STR_PAD_LEFT) }}
                                                             </td>
                                                             <td class="align-middle">
                                                                 @if ($person->file)
@@ -224,8 +226,13 @@
                                                                     &#126;
                                                                 @endif
                                                                 <br>
+                                                                @if( auth()->user()->role_id != 3)
                                                                 <strong>Dirección:&nbsp;</strong><em>{{ $person->address }}</em>,
                                                                 {{ $person->city }}, {{ $person->province }}
+                                                                @else
+                                                                <strong>Dirección:&nbsp;</strong>
+                                                                {{ $person->city }}, {{ $person->province }}
+                                                                @endif
                                                             </td>
                                                             <td class="py-0 align-middle" align="lefth">
                                                                 {{ $person->tblood_name }}
@@ -237,12 +244,14 @@
                                                                 {{ \Carbon\Carbon::parse($person->start_activitiest)->format('d/m/Y') }}
                                                                 <!--cambia formato fecha-->
                                                             </td>
+                                                            @if( auth()->user()->role_id != 3)
                                                             <td class="text-right py-0 align-middle">
                                                                 <a href="/usuario/{{ $person->id }}"
                                                                     title="Ver detalles" class="text-muted">
                                                                     <i class="fas fa-angle-right"></i>
                                                                 </a>
                                                             </td>
+                                                            @endif
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -265,9 +274,11 @@
                                                     ])->links() }}
                                                     @endif
                                                 </div>
+
         </form>
+        @if( auth()->user()->role_id != 3)
         <div class="btn float-right">
-            <form method="POST" action="/voluntarios/pdf/
+            <form method="POST" action="/usuarios/pdf/
                             @if ($f_estado) {{ $f_estado }}@else N0 @endif/
                             @if ($f_rol){{ $f_rol }}@else N0 @endif/
                             @if ($f_orden){{ $f_orden }}@else N0 @endif/
@@ -280,6 +291,7 @@
                 </button>
             </form>
         </div>
+        @endif
     </div>
     @endif
     </div>

@@ -124,9 +124,10 @@
         <img  src="vendor/adminlte/dist/img/SGI_arcoiris.jpg" width="120" height="100" />
       </td>
       <td width="55%" align="center" valign="bottom">
-        <h3>Información Voluntario
+        <h3>Información Usuario
           <br>
-          #{{ $voluntary->id }}
+          <!-- Completa con ceros a la izquierda -->
+          Nº: {{ str_pad($voluntary->id, 6, "0", STR_PAD_LEFT) }}
         </h3>
       </td>
       <td width="35%" align="right" valign="bottom" >

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\Login;
 use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,7 +62,22 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        $perfil = User::where('users.id', auth()->id())
+        $id= auth()->id();
+
+        //Ultimo acceso
+        if (Login::where('created_by', $id)->first())
+        {
+            $log_date = Login::where('created_by', $id)
+            ->orderBy('id', 'DESC')
+            ->first()
+            ->created_at;
+        }
+        else
+        {
+            $log_date = null;
+        }
+
+        $perfil = User::where('users.id', $id)
         ->join('roles', 'users.role_id', 'roles.id')
         ->join('people','users.person_id','people.id')
         ->join('blood_types', 'people.blood_type_id', 'blood_types.id')
@@ -100,7 +116,8 @@ class ProfileController extends Controller
         )
         ->first();
 
-        return view('layouts.admin.Profiles.edit', compact('perfil'));
+
+        return view('layouts.admin.Profiles.edit', compact('perfil', 'log_date'));
     }
 
     /**

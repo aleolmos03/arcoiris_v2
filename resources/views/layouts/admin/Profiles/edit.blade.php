@@ -115,7 +115,7 @@
                                             Último Acceso:
                                         </span>
                                         <span class="text-muted">
-                                            {{ \Carbon\Carbon::parse($perfil->updated_at)->format('d/m/Y H:i:s') }}
+                                            {{ \Carbon\Carbon::parse($log_date)->format('d/m/Y H:i:s') }} hs.
                                         </span>
                                     </p>
                                 </div>
@@ -129,9 +129,9 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            ID:
+                                            Nº:
                                             <input type="number" class="form-control" title="id"
-                                                value={{ auth()->user()->id }} disabled="">
+                                                value="{{ str_pad(auth()->user()->id , 6, "0", STR_PAD_LEFT) }}" disabled="">
                                         </div>
                                         <div class="col-sm-6">
                                             Mail:

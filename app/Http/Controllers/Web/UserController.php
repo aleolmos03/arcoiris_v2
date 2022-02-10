@@ -266,10 +266,20 @@ class UserController extends Controller
         ->first();
 
         //Ultimo acceso
-        $log_date=Login::where('created_by', $id)
-        ->orderBy('id', 'DESC')
-        ->first()
-        ->created_at;
+        if (Login::where('created_by', $id)->first())
+        {
+            $log_date = Login::where('created_by', $id)
+            ->orderBy('id', 'DESC')
+            ->first()
+            ->created_at;
+        }
+        else
+        {
+            $log_date = null;
+        }
+
+
+        //->created_at;
 
         if ($exportar == 'pdf' || $exportar == 'xls') {
 
@@ -341,10 +351,17 @@ class UserController extends Controller
         ->first();
 
         //Ultimo acceso
-        $log_date=Login::where('created_by', $id)
-        ->orderBy('id', 'DESC')
-        ->first()
-        ->created_at;
+        if (Login::where('created_by', $id)->first())
+        {
+            $log_date = Login::where('created_by', $id)
+            ->orderBy('id', 'DESC')
+            ->first()
+            ->created_at;
+        }
+        else
+        {
+            $log_date = null;
+        }
 
         return view('layouts.web.Users.edit', compact('voluntary', 'url_anterior', 'exportar','log_date'));
 
@@ -450,5 +467,150 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Display a listing PDF of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_pdf(Request $request,$estado,$rol,$orden,$tblood,$buscar)
+    {
+        $hoy = now()->format('d/m/Y H:i:s'); // fecha actual 2020-10-29
+        //--------Filtros--------
+
+        $exportar = $request->get('exportar');
+
+        if(trim($buscar) == "N0")
+        {
+            $f_buscar = '';
+        }
+        else
+        {
+            $f_buscar = trim($buscar);
+        }
+
+        if(trim($tblood) == 'N0')
+        {
+            $f_tblood  = '';
+        }
+        else
+        {
+            $f_tblood = trim($tblood);
+        }
+
+        if(trim($orden) == 'N0')
+        {
+            $f_orden = '';
+        }
+        else
+        {
+            $f_orden = trim($orden);
+        }
+
+        if(trim($rol) == 'N0')
+        {
+            $f_rol = '';
+        }
+        else
+        {
+            $f_rol = trim($rol);
+        }
+
+        if(trim($estado) == "N0")
+        {
+            $f_estado = '';
+        }
+        else
+        {
+            $f_estado = trim($estado);
+        }
+
+        $total = 0;
+
+
+        $titulo = "Usuarios";
+
+        $join_users = User::join('roles', 'users.role_id', 'roles.id')
+        ->join('people','users.person_id','people.id')
+        ->join('blood_types', 'people.blood_type_id', 'blood_types.id')
+        ->join('addresses', 'people.address_id', 'addresses.id')
+        ->join('cities', 'addresses.city_id', 'cities.id')
+        ->join('provinces', 'cities.province_id', 'provinces.id');
+
+        /*if (is_numeric($f_buscar)) { // si es numero
+            if ($f_buscar < 999999) { // busca por ID
+                $join_users->where('person_users.id', '=', "$f_buscar");
+            } else { // busca por DNI
+                $usuario = User::where('person_id', current_DNI_info($f_buscar)->id)->first(); //busca el Id de paciente a aprtir del DNI
+
+                if ($usuario == null) {
+                    $usuario_id = 0;
+                } else {
+                    $usuario_id = $usuario->user_id;
+                }
+
+                $join_users->where('users.id', '=', "$usuario_id");
+            }
+        } else {
+
+            $join_users->xNombre($f_buscar);
+        }
+
+
+        if ($f_estado != '') // muestra activos inactrio segun select estado
+        {
+            if ($f_estado == 1) {
+                $join_users->whereNull('person_users.end_activitiest');
+            }
+            if ($f_estado == 2) {
+                $join_users->whereNotNull('person_users.end_activitiest');
+            }
+        }*/
+
+        $join_users->select(
+            'users.id as id',
+            'users.start_activitiest as start_activitiest',
+            'users.end_activitiest as end_activitiest',
+            'users.created_at as created_at',
+            'users.mobile1 as mobile1',
+            'people.file as file',
+            'people.name as name',
+            'people.last_name as last_name',
+            'users.email as email',
+            'people.blood_type_id as tblood_id',
+            'blood_types.name as tblood_name',
+            'users.role_id as role_id',
+            'roles.name as role_name',
+            'addresses.address as address',
+            'cities.name as city',
+            'provinces.name as province'
+        );
+
+        $total = $join_users->count(); // cuenta los resultados encontrados
+
+        switch ($f_orden) { // ordena segun columna
+            case "F_asc":
+                $join_users->orderBy('people.created_at', 'DESC');
+                break;
+            case "F_desc":
+                $join_users->orderBy('people.created_at', 'ASC');
+                break;
+            case "N_asc":
+                $join_users->orderBy('name', 'DESC');
+                break;
+            case "N_desc":
+                $join_users->orderBy('name', 'ASC');
+                break;
+            default:
+                $join_users->orderBy('people.created_at', 'DESC');
+        }
+
+        $person_users = $join_users->get();
+
+        $pdf = \PDF::loadView('layouts.web.Users.indexPdf', compact('person_users', 'titulo', 'f_buscar', 'f_tblood', 'f_orden', 'f_rol', 'total', 'exportar', 'f_estado'));
+
+        //return $pdf->download('ejemplo.pdf');
+        return $pdf->stream($titulo . '__' . $hoy . '.pdf');
     }
 }

@@ -108,7 +108,11 @@
                                             Último Acceso:
                                         </span>
                                         <span class="text-muted">
-                                            {{ \Carbon\Carbon::parse($log_date)->format('d/m/Y H:i:s') }} hs.
+                                            @if($log_date)
+                                                {{ \Carbon\Carbon::parse($log_date)->format('d/m/Y H:i:s') }} hs.
+                                            @else
+                                                -
+                                            @endif
                                         </span>
                                     </p>
                                 </div>
@@ -122,9 +126,9 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            ID:
-                                            <input name="id" type="number" class="form-control" placeholder="ID" title="id"
-                                            disabled="" value="{{ $voluntary->id }}">
+                                            Nº:
+                                            <input name="id"  class="form-control" placeholder="ID" title="id"
+                                            disabled="" value={{ str_pad($voluntary->id, 6, "0", STR_PAD_LEFT) }}>
                                         </div>
                                         <div class="col-sm-6">
                                             Mail:

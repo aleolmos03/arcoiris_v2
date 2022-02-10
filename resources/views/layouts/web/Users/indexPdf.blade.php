@@ -54,7 +54,7 @@
           {{ now()->format('Y-m-d H:i:s') }}
         </p>
         <p class="contenido">
-          Usuario: {{ current_dataUser()->name }} {{ current_dataUser()->last_name }}
+            Usuario: {{ App\Models\User::user_name()  }} {{ App\Models\User::user_last_name() }}
         </p>
       </td>
     </tr>
@@ -79,7 +79,7 @@
           Rol
         </th>
         <th width="15%" title="Fecha de inicio">
-          Ingresó
+          Ingreso
         </th>
 
       </tr>
@@ -88,10 +88,8 @@
       @foreach($person_users as $person)
         <tr>
           <td class="py-0 align-middle ">
-            {{ $person->id }}
-
+            {{ str_pad($person->id, 6, "0", STR_PAD_LEFT) }}
           </td>
-
           <td class="py-0 align-middle">
             {{ $person->name }} {{ $person->last_name }}
           </td>

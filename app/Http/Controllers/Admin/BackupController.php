@@ -15,7 +15,7 @@ class BackupController extends Controller
      */
     public function index()
     {
-        
+
         $backups = Backup::join('users', 'backups.created_by', '=', 'users.id')
         ->join('people', 'users.person_id', '=', 'people.id')
         ->select(
@@ -26,7 +26,7 @@ class BackupController extends Controller
             'people.last_name as last_name',
             'users.email as userName'
         )
-        ->orderBy('id','DESC');
+        ->orderBy('id','DESC'); 
 
         $total=$backups->count();
         $backups=$backups->paginate(7);

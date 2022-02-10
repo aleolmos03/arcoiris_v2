@@ -42,6 +42,8 @@ Route::post('/perfil/fin/{id}', [App\Http\Controllers\Admin\ProfileController::c
 Route::get('/usuarios', [App\Http\Controllers\Web\UserController::class, 'index'])->name('index');
 Route::get('/usuario/{id}', [App\Http\Controllers\Web\UserController::class, 'show'])->name('show');
 
+Route::post('/usuarios/pdf/{estado}/{rol}/{orden}/{tblood}/{buscar}', [App\Http\Controllers\Web\UserController::class, 'index_pdf'])->name('index_pdf');
+
 Route::get('/usuario', [App\Http\Controllers\Web\UserController::class, 'create'])->name('create');
 Route::post('/usuario/crear', [App\Http\Controllers\Web\UserController::class, 'store']);
 

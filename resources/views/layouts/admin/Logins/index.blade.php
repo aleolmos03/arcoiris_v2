@@ -94,7 +94,7 @@
                           @foreach($history as $his)
                             <tr>
                                 <td class="py-3 align-middle">
-                                    {{ \Carbon\Carbon::parse($his->created_at)->format('d/m/Y H:m:s')}} hs.<!--cambia formato fecha-->
+                                    {{ \Carbon\Carbon::parse($his->created_at)->format('d/m/Y H:i:s') }} hs. 
                                 </td>
                                 <td class="py-3 align-middle">
                                   {{ $his->email }}

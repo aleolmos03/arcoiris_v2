@@ -55,7 +55,11 @@
                                         <span class="font-weight-bold">
                                             Inicio Voluntariado:
                                         </span>
-                                        {{ \Carbon\Carbon::parse($voluntary->start_activitiest)->format('d/m/Y') }}
+                                        <input name="start_activitiest" title="Fecha de Nacimiento" align="center"
+                                                    type="date" class="form-control" style="text-align:center;"
+                                                    placeholder="01-01-2020" data-inputmask-alias="datetime"
+                                                    data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="true"
+                                                    value="{{ $voluntary->start_activitiest }}">
                                         <span class="text-muted">
                                         </span>
                                     </p>
@@ -83,9 +87,9 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            ID:
+                                            Nº:
                                             <input name="id" type="number" class="form-control" placeholder="ID" title="id"
-                                            disabled="" value="{{ $voluntary->id }}">
+                                            disabled="" value="{{ str_pad($voluntary->id, 6, "0", STR_PAD_LEFT) }}">
                                         </div>
                                         <div class="col-sm-6">
                                             Mail:
