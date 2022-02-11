@@ -25,21 +25,29 @@
                     @endif
                 </h3>
                 <div class="card-tools">
+                    @if (auth()->user()->id == $voluntary->id)
+                        <button type="button" class="btn btn-tool bg-gradient-info btn-sm" title="Editar">
+                            <a href="/perfil" type="button" >
+                                <i class="far fa-edit"></i>
+                                &nbsp; Editar
+                            </a>
+                        </button>
+                    @endif
                     @if( auth()->user()->role_id != 3)
                         @if( auth()->user()->role_id == 1 && $voluntary->role_id >= 1 || auth()->user()->role_id == 2 && $voluntary->role_id > 2 )
                             @if (!$voluntary->end_activitiest)
-                                <button type="button" class="btn btn-tool" title="Editar">
-                                    <a href="/usuario/{{ $voluntary->id }}/editar" type="button"
-                                        class="btn btn-tool bg-gradient-info btn-sm">
+                                <button type="button" class="btn btn-tool bg-gradient-info btn-sm" title="Editar">
+                                    <a href="/usuario/{{ $voluntary->id }}/editar" type="button" >
                                         <i class="far fa-edit"></i>
-                                        &nbsp; Editar</a>
+                                        &nbsp; Editar
+                                    </a>
                                 </button>
                             @endif
-                            @if (!$voluntary->end_activitiest)
+                            @if ($voluntary->state == 'A' || $voluntary->state == 'N' )
                                 <button type="button" class="btn btn-tool bg-gradient-info btn-sm">
                                     <a type="button" data-toggle="modal" data-target="#modal-fin">
                                         <i class="far fa-trash-alt"></i>
-                                        &nbsp;Fin voluntariado
+                                        &nbsp;Fin Voluntariado
                                     </a>
                                 </button>
                             @else
@@ -72,16 +80,16 @@
                                     </div>
                                 </div>
                             </div>
-                            @if ($voluntary->end_activitiest)
-                                <div class="description-block p-2 bg-teal ">
+                            @if ($voluntary->state == 'I')
+                                <div class="description-block p-2 bg-warning ">
                                     <span class="description-percentage ">
                                         Fin Voluntariado:
-                                        </span>
-                                        <h5 class="description-header ">
-                                            {{ \Carbon\Carbon::parse($voluntary->end_activitiest)->format('d/m/Y') }}
-                                        </h5>
-                                    </div>
-                                @endif
+                                    </span>
+                                    <h5 class="description-header ">
+                                        {{ \Carbon\Carbon::parse($voluntary->end_activitiest)->format('d/m/Y') }}
+                                    </h5>
+                                </div>
+                            @endif
                         </div>
                         <div class="card">
                             <div class="card-body">
@@ -223,7 +231,7 @@
                                                 <select name="tblood" title="Grupo Sanguíneo (RH)" class="form-control"
                                                     disabled="">
                                                     @foreach (current_tbloods() as $tblood)
-                                                        <option value="{{ $tblood->id }}" @if ($tblood->id == $voluntary->tblood_id) selected @endif>
+                                                        <option value="{{ $tblood->id }}" @if ($tblood->id == $voluntary->blood_type_id) selected @endif>
                                                             {{ $tblood->name }}
                                                         </option>
                                                     @endforeach
@@ -382,7 +390,7 @@
                         <button type="button" class="btn  btn-default btn-sm" data-dismiss="modal">
                             Cancelar
                         </button>
-                        <button name="guardar" type="submit" class="btn  btn-info btn-sm" value="0">
+                        <button name="fin" type="submit" class="btn  btn-info btn-sm" value="0">
                             <i class="fas fa-check"></i>
                              Guardar
                         </button>
@@ -391,6 +399,9 @@
                 <!-- /.modal-content -->
             </div>
         </div>
+    </form>
+    <form method="POST" action="/usuario/{{ $voluntary->id }}/fin">
+        {!! csrf_field() !!}
         <!-- /.modal -->
         <!-- /.modal reiorporar -->
         <div class="modal fade" id="modal-rein">
@@ -422,7 +433,7 @@
                         <button type="button" class="btn  btn-default btn-sm" data-dismiss="modal">
                             Cancelar
                         </button>
-                        <button name="guardar" type="submit" class="btn  btn-info btn-sm" value="1">
+                        <button name="fin" type="submit" class="btn  btn-info btn-sm" value="1">
                             <i class="fas fa-check"></i>
                             Guardar
                         </button>

@@ -83,8 +83,6 @@ class User extends Authenticatable
         return User::where('email', '=', $mail)->exists();
     }
 
-
-
     public function role()
     {
         //un usuario tiene un rol

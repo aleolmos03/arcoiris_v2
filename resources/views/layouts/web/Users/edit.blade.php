@@ -39,8 +39,6 @@
                                         <img class="user-img img-fluid" src="{!! asset($voluntary->file) !!}"
                                             alt="User profile picture">
                                     </div>
-                                    <div class="description-block p-2 bg-warning">
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -185,7 +183,7 @@
                                                 </div>
                                                 <select name="tblood" title="Grupo Sanguíneo (RH)" class="form-control">
                                                     @foreach (current_tbloods() as $tblood)
-                                                        <option value="{{ $tblood->id }}" @if ($tblood->id == $voluntary->tblood_id) selected @endif>
+                                                        <option value="{{ $tblood->id }}" @if ($tblood->id == $voluntary->blood_type_id) selected @endif>
                                                             {{ $tblood->name }}
                                                         </option>
                                                     @endforeach
@@ -336,7 +334,7 @@
                         <button type="button" class="btn  btn-default btn-sm" data-dismiss="modal">
                             Cancelar
                         </button>
-                        <button name="aceptar" type="submit" class="btn  btn-info btn-sm" value="1">
+                        <button name="reestablecer" type="submit" class="btn  btn-info btn-sm" value="1">
                             <i class="fas fa-check"></i> Aceptar
                         </button>
                     </div>

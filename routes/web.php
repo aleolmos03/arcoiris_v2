@@ -33,10 +33,11 @@ Route::get('/historial/{filtro}', [App\Http\Controllers\Admin\LoginController::c
 Route::get('/perfil', [App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('edit');
 Route::post('/perfil/editar',[App\Http\Controllers\Admin\ProfileController::class, 'update']);
 
-//---actualizar contraseña
-Route::get('/perfil/nuevo', [App\Http\Controllers\Admin\ProfileController::class, 'create'])->name('create');
-Route::post('/perfil/actualizar', [App\Http\Controllers\Admin\ProfileController::class, 'update_pass']);
-Route::post('/perfil/fin/{id}', [App\Http\Controllers\Admin\ProfileController::class, 'update_end']);
+//---Actualizar contraseña
+Route::post('/perfil/actualizar', [App\Http\Controllers\Admin\ProfileController::class, 'update']);
+
+//---Finalizar voluntariado
+Route::post('/perfil/fin', [App\Http\Controllers\Admin\ProfileController::class, 'update']);
 
 //---Usuarios---
 Route::get('/usuarios', [App\Http\Controllers\Web\UserController::class, 'index'])->name('index');

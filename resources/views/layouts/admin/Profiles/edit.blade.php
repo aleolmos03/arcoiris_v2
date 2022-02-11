@@ -232,7 +232,7 @@
                                                 </div>
                                                 <select name="tblood" title="Grupo Sanguíneo (RH)" class="form-control">
                                                     @foreach (current_tbloods() as $tblood)
-                                                        <option value="{{ $tblood->id }}" @if ($tblood->id == $perfil->tblood_id) selected @endif>
+                                                        <option value="{{ $tblood->id }}" @if ($tblood->id == $perfil->blood_type_id) selected @endif>
                                                             {{ $tblood->name }}
                                                         </option>
                                                     @endforeach
@@ -297,7 +297,7 @@
                                         <div class="col-sm-3">
                                             Celular 1:
                                             <input name="mobile1" type="text" class="form-control" placeholder="Celular 1"
-                                                title="Celular 1" value="{{ $perfil->mobile }}">
+                                                title="Celular 1" value="{{ $perfil->mobile1 }}">
                                         </div>
                                         <div class="col-sm-3">
                                             Teléfono 1:
@@ -390,7 +390,7 @@
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn  btn-default btn-sm" data-dismiss="modal">Cancelar</button>
 
-                        <button name="continuar" type="submit" class="btn  btn-info btn-sm" value="1">
+                        <button name="cambiar" type="submit" class="btn  btn-info btn-sm" value="1">
                             <i class="fas fa-check"></i> Continuar
                         </button>
                     </div>
@@ -448,7 +448,7 @@
                         <button ID="cancelar" type="button" class="btn  btn-default btn-sm"
                             data-dismiss="modal">Cancelar
                         </button>
-                        <button name="guardar" id="guardar2" class="btn  btn-info btn-sm" value="1">
+                        <button name="actualizar" id="guardar2" class="btn  btn-info btn-sm" value="1">
                             <i class="fas fa-check"></i> Guardar
                         </button>
                     </div>
@@ -459,7 +459,7 @@
         </div>
         <!-- /.modal -->
     </form>
-    <form method="POST" action=" /voluntarios/info/{{ $perfil->pu_id }}/fin">
+    <form method="POST" action="/perfil/fin">
         {!! csrf_field() !!}
         <!-- /.modal -->
         <div class="modal fade" id="modal-fin">
@@ -477,12 +477,11 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-12">
-                                <p><strong>{{ $perfil->name }} {{ $perfil->last_name }}</strong>, DNI:
-                                    <strong>{{ $perfil->DNI }}</strong>, finalizó el voluntariado el día
-                                    <input name="end_activitiest" align="center" type="date" class="form-control"
-                                        style="text-align:center;" placeholder="01-01-2020" data-inputmask-alias="datetime"
-                                        data-inputmask-inputformat="dd/mm/yyyy" data-mask="" im-insert="true" @if (!$perfil->end_activitiest) required @endif </p>
-
+                                <p>
+                                    <strong>{{ $perfil->name }} {{ $perfil->last_name }}</strong>,
+                                    <br>
+                                    ¿Deseas finalizar tu voluntriado en Asociación Civil Sin Fines de Lucro Arcoiris?
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -490,7 +489,7 @@
                         <button type="button" class="btn  btn-default btn-sm" data-dismiss="modal">
                             Cancelar
                         </button>
-                        <button name="aceptar" type="submit" class="btn  btn-info btn-sm" value="1">
+                        <button name="fin" type="submit" class="btn  btn-info btn-sm" value="0">
                             <i class="fas fa-check"></i> Aceptar
                         </button>
                     </div>
@@ -501,6 +500,46 @@
         </a>
         <!-- /.modal -->
     </form>
+
+    <!-- /.modal -->
+    <div class="modal fade" id="modal-gracias">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        &nbsp;Fin Voluntariado
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>
+                                <strong>{{ $perfil->name }} {{ $perfil->last_name }}</strong>,
+                                <br>
+                                Muchas Gracias por Colaborar con Asociación Civil Sin Fines de Lucro Arcoiris.
+                                <br>
+                                Hasta la proxima!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <div  class="btn-sm" data-dismiss="modal">
+
+                    </div>
+                    <a class="btn btn-default btn-sm float-right " href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fa fa-fw fa-power-off text-red"></i>
+                        Salir
+                    </a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            <!-- /.modal -->
+        </div>
+    </div>
+    </a>
+
 @stop
 
 @section('js')
@@ -508,17 +547,20 @@
 
         $(document).ready(function() {
 
-            @if (current_infoUser(auth()->id())->active == 'E')
+            @if (current_infoUser(auth()->id())->state == 'E')
                 $('#modal-cambio-pass').modal({backdrop: 'static', keyboard: false})
                 $('#strengthMessage0').removeClass()
                 $('#strengthMessage0').addClass('Short')
                 $('#strengthMessage0').html('Contraseña Incorrecta')
             @endif
-            @if (current_infoUser(auth()->id())->active == 'O')
+            @if (current_infoUser(auth()->id())->state == 'O')
                 $('#modal-cambio-pass2').modal({backdrop: 'static', keyboard: false})
                 $('#OldPassword').val('');
                 $('#strengthMessage0').removeClass()
                 $('#strengthMessage0').html('')
+            @endif
+            @if (current_infoUser(auth()->id())->state == 'I')
+                $('#modal-gracias').modal({backdrop: 'static', keyboard: false})
             @endif
 
             //limpia campos modal contraseña

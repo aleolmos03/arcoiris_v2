@@ -8,6 +8,7 @@ use App\Models\Login;
 use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 
 class ProfileController extends Controller
@@ -90,6 +91,7 @@ class ProfileController extends Controller
             'users.password',
             'users.phone1',
             'users.phone2',
+            'users.mobile1',
             'users.mobile2',
             'users.occupation',
             'users.curriculum_vitae',
@@ -138,12 +140,12 @@ class ProfileController extends Controller
         ->join('cities', 'addresses.city_id', 'cities.id')
         ->join('provinces', 'cities.province_id', 'provinces.id')
         ->select(
-                'users.id as id',
-                'users.person_id as person_id',
+                'users.id',
+                'users.person_id',
                 'people.created_by as log_id', // info de quien modifica / crea
-                'people.address_id as address_id',
-                'addresses.city_id as city_id',
-                'cities.province_id as province_id',
+                'people.address_id',
+                'addresses.city_id',
+                'cities.province_id'
             )
             ->first();
 
@@ -152,11 +154,58 @@ class ProfileController extends Controller
          dd(Hash::check('plain-text', $hashedPassword));
         }*/
 
-        if ($request->aceptar == '1') {
-            //Edita contraseña
-            $user = User::find($join_perfil->user_id);
-            $user->password = bcrypt('561-Arcoiris');//poner DNI
+        //Finalizar voluntariado 0->Finaliza
+        if ($request->fin == '0') {
+
+            //Edita la persona
+            $person = Person::find($join_perfil->person_id);
+            $person->state = 'I';
+            $person->created_by = auth()->id();
+            $person->save();
+
+            //Edita info Usuario
+            $user = User::find($join_perfil->id);
+            $user->end_activitiest = now();
             $user->save();
+
+            //Session::flash('message', 'Modificado');
+        }
+
+        //Cambiar de contraseña 1
+        if ($request->cambiar == '1') {
+
+            if(Hash::check($request->OldPassword, auth()->user()->password))
+            {
+                $person = Person::find($join_perfil->person_id);
+                $person->state = "O";// ok contraseña
+                $person->save();
+            }
+            else
+            {
+                $person = Person::find($join_perfil->person_id);
+                $person->state = "E";// error de contraseña
+                $person->save();
+
+                //Session::flash('message', 'ErrorP');
+            }
+
+            return redirect('/perfil'); //anda*/
+        }
+
+        //Actualizar - Guardo Nueva Contraseña
+        if ($request->actualizar == '1') {
+
+            //Edita persona
+            $person = Person::find($join_perfil->person_id);
+            $person->state = "A";
+            $person->save();
+
+            //Edita info Usuario
+            $user = User::find($join_perfil->id);
+            $user->password = bcrypt($request->NewPassword);
+            $user->save();
+
+            return redirect('/perfil'); //anda*/
         }
 
         if ($request->guardar == '1') {

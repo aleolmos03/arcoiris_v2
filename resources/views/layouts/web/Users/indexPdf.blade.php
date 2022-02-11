@@ -64,7 +64,7 @@
     <thead>
       <tr>
         <th width="5%">
-          ID
+          Nº
         </th>
         <th width="20%">
           Nombre
@@ -97,10 +97,10 @@
             <strong>Mail:&nbsp;</strong>{{ $person->email }}
             <br>
             <strong>Celular:&nbsp;</strong>
-            @if($person->mobile)
-              {{ $person->mobile }}
+            @if ($person->mobile1)
+                {{ $person->mobile1 }}
             @else
-              &#126;
+                &#126;
             @endif
             <br>
             <strong>Dirección:&nbsp;</strong><em>{{ $person->address}}</em>, {{ $person->city}}, {{ $person->province}}

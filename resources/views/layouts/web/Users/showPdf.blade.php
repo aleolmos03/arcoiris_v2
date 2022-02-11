@@ -116,31 +116,34 @@
   }
 </style>
 </head>
-<body>
-  <!-- Encabezado -->
+<header>
+
+    <!-- Encabezado -->
   <table border width="100%" align="center" cellspacing="8">
     <tr>
       <td width="10%" valign="bottom">
         <img  src="vendor/adminlte/dist/img/SGI_arcoiris.jpg" width="120" height="100" />
       </td>
-      <td width="55%" align="center" valign="bottom">
-        <h3>Información Usuario
-          <br>
-          <!-- Completa con ceros a la izquierda -->
-          Nº: {{ str_pad($voluntary->id, 6, "0", STR_PAD_LEFT) }}
-        </h3>
+      <td width="35%" align="center" valign="bottom">
+
       </td>
-      <td width="35%" align="right" valign="bottom" >
-        <p class="contenido">
-          {{ now()->format('d/m/Y H:i:s') }}
-        </p>
-        <p class="contenido">
-          Usuario: {{ App\Models\User::user_name()  }} {{ App\Models\User::user_last_name() }}
-        </p>
+      <td width="55%" align="right" valign="bottom" >
+
+        <h3>  Usuario Nº:
+                <!-- Completa con ceros a la izquierda -->
+                {{ str_pad($voluntary->id, 6, "0", STR_PAD_LEFT) }}
+            </h3>
       </td>
+    </tr>
+    <tr>
+        <td width="10%" valign="bottom">
+
+        </td>
     </tr>
   </table>
   <hr>
+</header>
+<body>
   <!-- info voluntario -->
   <table class="tg" width="100%">
     <thead>
@@ -295,10 +298,10 @@
       <td class="tg-7drl">
         Ultimo acceso:
         <br>
-        @if($voluntary->updated_at)
-         {{ \Carbon\Carbon::parse($voluntary->updated_at)->format('d/m/Y H:i:s') }}
+        @if($log_date)
+            {{ \Carbon\Carbon::parse($log_date)->format('d/m/Y H:i:s') }} hs.
         @else
-        -
+         -
         @endif
       </td>
       <td class="tg-sd0f">
@@ -348,4 +351,17 @@
 </table>
 
 </body>
+
+<footer>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p class="contenido" align="right">
+        Generado por:
+                  {{ App\Models\User::adminlte_desc() }},
+                  {{ App\Models\User::user_name()  }} {{ App\Models\User::user_last_name() }}
+                  el día {{ now()->format('d/m/Y H:i:s') }}
+          </p>
+</footer>
 </html>

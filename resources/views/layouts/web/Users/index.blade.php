@@ -198,15 +198,15 @@
                                                                         alt="message user image">
                                                                 @endif
                                                                 <div class="align-left">
-                                                                    @if ($person->created_at > now()->subDay(15) && !$person->end_activitiest)
-                                                                        <!--el cartel de NUEVO SI INGRESO DENTORO DE LOS 20 DIAS-->
-                                                                        <span class="badge badge-info">
-                                                                            Nuevo
-                                                                        </span>
+                                                                    @if ($person->state == 'N' || $person->state == 'A')
+                                                                        @if ($person->start_activitiest >= now()->subDay(15))
+                                                                         <!--el cartel de NUEVO SI INGRESO DENTORO DE LOS 15 DIAS-->
+                                                                            <span class="badge badge-info">
+                                                                                Nuevo
+                                                                            </span>
+                                                                        @endif
                                                                     @endif
-
-                                                                    @if ($person->end_activitiest)
-                                                                        <!--el cartel de NUEVO SI INGRESO DENTORO DE LOS 20 DIAS-->
+                                                                    @if ($person->state == 'I')
                                                                         <span class="badge badge-warning">
                                                                             Inactivo
                                                                         </span>

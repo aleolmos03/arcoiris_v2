@@ -80,6 +80,7 @@ class UserController extends Controller
                 'users.mobile1 as mobile1',
                 'people.file as file',
                 'people.name as name',
+                'people.state',
                 'people.last_name as last_name',
                 'users.email as email',
                 'people.blood_type_id as tblood_id',
@@ -242,6 +243,7 @@ class UserController extends Controller
             'users.occupation',
             'users.curriculum_vitae',
             'users.start_activitiest',
+            'users.end_activitiest',
             'users.updated_at',
             'users.role_id',
             'roles.name as role_name',
@@ -387,22 +389,23 @@ class UserController extends Controller
         ->select(
                 'users.id',
                 'users.person_id',
+                'people.DNI',
                 'people.created_by', // info de quien modifica / crea
                 'people.address_id',
                 'addresses.city_id',
-                'cities.province_id',
+                'cities.province_id'
             )
             ->first();
 
-        if ($request->aceptar == '1')
+        //Restablecer contraseña
+        if ($request->reestablecer == '1')
         {
-            //Edita contraseña
-            $user = User::find($join_voluntary->user_id);
-            $user->password = bcrypt('561-Arcoiris');// poner el DNI
+            $user = User::find($join_voluntary->id);
+            $user->password = bcrypt($join_voluntary->DNI);
             $user->save();
 
             $per = Person::find($join_voluntary->person_id);
-            $per->state='P';// P = nuevas password
+            $per->state='R';
             $per->save();
 
             //Session::flash('message', 'ExitoP');
@@ -454,8 +457,8 @@ class UserController extends Controller
 
             return redirect($url); //anda*/
         }
-        return redirect('/usuario/' . $id . '/editar')->withInput(); // anda retora si encutra dni
 
+        return redirect('/usuario/' . $id . '/editar')->withInput(); // anda retora si encutra dni
     }
 
     /**
@@ -612,5 +615,65 @@ class UserController extends Controller
 
         //return $pdf->download('ejemplo.pdf');
         return $pdf->stream($titulo . '__' . $hoy . '.pdf');
+    }
+
+     /**
+     * Update end voluntary the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update_end(Request $request, $id)
+    {
+        //carga los Id de cada tabla a actualizar
+        $join_voluntary = User::where('users.id', $id)
+        ->join('people','users.person_id','people.id')
+        ->select(
+                'users.id',
+                'users.person_id',
+                'people.DNI'
+            )
+            ->first();
+
+        //Finalizar voluntariado 0->Finaliza / 1->Reeincorpora
+        if ($request->fin == '0') {
+
+            //Edita la persona
+            $person = Person::find($join_voluntary->person_id);
+            $person->state = 'I';
+            $person->created_by = auth()->id();
+            $person->save();
+
+            //Edita info Usuario
+            $user = User::find($join_voluntary->id);
+            $user->end_activitiest = $request->end_activitiest;
+            $user->save();
+
+            //Session::flash('message', 'Modificado');
+        }
+        else {
+
+            //Edita la persona
+            $person = Person::find($join_voluntary->person_id);
+            $person->state = 'N';
+            $person->created_by = auth()->id();
+            $person->save();
+
+            //Edita info Usuario
+            $user = User::find($join_voluntary->id);
+            $user->password = bcrypt($join_voluntary->DNI);
+            $user->end_activitiest = Null;
+            $user->start_activitiest = $request->start_activitiest_r;
+            $user->save();
+
+            //Session::flash('message', 'Modificado');
+        }
+
+        //metdodo pagina anterior
+        $end = strlen('/fin');
+        $url = substr(URL::current(), 0, strlen(URL::current()) - $end);
+
+        return redirect($url); //anda*/
     }
 }
