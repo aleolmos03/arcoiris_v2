@@ -60,42 +60,45 @@ class UserController extends Controller
         } else {
 
             $join_users->xNombre($f_buscar);
-        }
-
-        if ($f_estado != '') // muestra activos inactrio segun select estado
-        {
-            if ($f_estado == 1) {
-                $join_users->whereNull('person_users.end_activitiest');
-            }
-            if ($f_estado == 2) {
-                $join_users->whereNotNull('person_users.end_activitiest');
-            }
         }*/
 
+        // FILTRO ESTADO - muestra activos inactivo segun select estado
+        // ver de cambar opr la I - Inativo / A- Activo
+        if ($f_estado != '')
+        {
+            if ($f_estado == 1) {
+                $join_users->whereNull('users.end_activitiest');
+            }
+            if ($f_estado == 2) {
+                $join_users->whereNotNull('users.end_activitiest');
+            }
+        }
+
         $join_users->select(
-                'users.id as id',
-                'users.start_activitiest as start_activitiest',
-                'users.end_activitiest as end_activitiest',
-                'users.created_at as created_at',
-                'users.mobile1 as mobile1',
-                'people.file as file',
-                'people.name as name',
-                'people.state',
-                'people.last_name as last_name',
-                'users.email as email',
-                'people.blood_type_id as tblood_id',
-                'blood_types.name as tblood_name',
-                'users.role_id as role_id',
-                'roles.name as role_name',
-                'addresses.address as address',
-                'cities.name as city',
-                'provinces.name as province'
-            );
+            'users.id as id',
+            'users.start_activitiest as start_activitiest',
+            'users.end_activitiest as end_activitiest',
+            'users.created_at as created_at',
+            'users.mobile1 as mobile1',
+            'people.file as file',
+            'people.name as name',
+            'people.state',
+            'people.last_name as last_name',
+            'users.email as email',
+            'people.blood_type_id as tblood_id',
+            'blood_types.name as tblood_name',
+            'users.role_id as role_id',
+            'roles.name as role_name',
+            'addresses.address as address',
+            'cities.name as city',
+            'provinces.name as province'
+        );
 
-        //dd(now()->subDay(15));
-        $total = $join_users->count(); // cuenta los resultados encontrados
+        // cuenta los resultados encontrados
+        $total = $join_users->count();
 
-        switch ($f_orden) { // ordena segun columna
+        // ordena segun columna
+        switch ($f_orden) {
             case "F_asc":
                 $join_users->orderBy('people.created_at', 'DESC');
                 break;
@@ -120,13 +123,12 @@ class UserController extends Controller
 
             //return $pdf->download('ejemplo.pdf');
             return $pdf->stream($titulo . '__' . $hoy . '.pdf');
-        } else {
+        }
+        else {
 
             $person_users = $join_users->paginate(7);
 
             return view('layouts.web.Users.index', compact('person_users', 'titulo', 'f_buscar', 'f_tblood', 'f_orden', 'f_rol', 'total', 'exportar', 'f_estado'));
-           // return view('vendor.web.Volunteers.index', compact('person_users', 'titulo', 'f_buscar', 'f_tblood', 'f_orden', 'f_rol', 'total', 'exportar', 'f_estado'));
-            //return view('vendor.web.Volunteers.index',["person_users" => $person_users,"f_orden" => $f_orden]);
         }
     }
 
@@ -214,8 +216,6 @@ class UserController extends Controller
     {
         $hoy = now()->format('d/m/Y H:i:s'); // fecha actual 2020-10-29
 
-        //dd('vincular Último Acceso con login');
-
         //--------Filtros--------
         $exportar = $request->get('exportar');
         $fin = $request->get('fin');
@@ -244,7 +244,6 @@ class UserController extends Controller
             'users.curriculum_vitae',
             'users.start_activitiest',
             'users.end_activitiest',
-            'users.updated_at',
             'users.role_id',
             'roles.name as role_name',
             'people.id as person_id',
@@ -258,6 +257,7 @@ class UserController extends Controller
             'blood_types.name as tblood_name',
             'people.state',
             'people.file',
+            'people.updated_at',
             'people.created_by',
             'addresses.address',
             'addresses.city_id as city_id',
@@ -279,9 +279,6 @@ class UserController extends Controller
         {
             $log_date = null;
         }
-
-
-        //->created_at;
 
         if ($exportar == 'pdf' || $exportar == 'xls') {
 
@@ -378,6 +375,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // fecha actual
+        $hoy = now();
+
         //carga los Id de cada tabla a actualizar
         $join_voluntary = User::where('users.id', $id)
         ->join('roles', 'users.role_id', 'roles.id')
@@ -402,10 +402,12 @@ class UserController extends Controller
         {
             $user = User::find($join_voluntary->id);
             $user->password = bcrypt($join_voluntary->DNI);
+            $user->updated_at = $hoy;
             $user->save();
 
             $per = Person::find($join_voluntary->person_id);
             $per->state='R';
+            $per->updated_at = $hoy;
             $per->save();
 
             //Session::flash('message', 'ExitoP');
@@ -434,6 +436,7 @@ class UserController extends Controller
                 $person->file = "vendor/adminlte/dist/img/user2.jpg";
             }
             $person->created_by = auth()->id();
+            $person->updated_at = $hoy;
             $person->save();
 
             //Edita info Usuario
@@ -447,6 +450,7 @@ class UserController extends Controller
             $user->occupation = $request->occupation;
             $user->curriculum_vitae = $request->curriculum_vitae;
             $user->start_activitiest = $request->start_activitiest;
+            $user->updated_at = $hoy;
             $user->save();
 
             //Session::flash('message', 'Modificado');
@@ -626,6 +630,9 @@ class UserController extends Controller
      */
     public function update_end(Request $request, $id)
     {
+        // fecha actual
+        $hoy = now();
+
         //carga los Id de cada tabla a actualizar
         $join_voluntary = User::where('users.id', $id)
         ->join('people','users.person_id','people.id')
@@ -633,8 +640,8 @@ class UserController extends Controller
                 'users.id',
                 'users.person_id',
                 'people.DNI'
-            )
-            ->first();
+        )
+        ->first();
 
         //Finalizar voluntariado 0->Finaliza / 1->Reeincorpora
         if ($request->fin == '0') {
@@ -643,11 +650,13 @@ class UserController extends Controller
             $person = Person::find($join_voluntary->person_id);
             $person->state = 'I';
             $person->created_by = auth()->id();
+            $person->updated_at = $hoy;
             $person->save();
 
             //Edita info Usuario
             $user = User::find($join_voluntary->id);
             $user->end_activitiest = $request->end_activitiest;
+            $user->updated_at = $hoy;
             $user->save();
 
             //Session::flash('message', 'Modificado');
@@ -658,6 +667,7 @@ class UserController extends Controller
             $person = Person::find($join_voluntary->person_id);
             $person->state = 'N';
             $person->created_by = auth()->id();
+            $person->updated_at = $hoy;
             $person->save();
 
             //Edita info Usuario
@@ -665,6 +675,7 @@ class UserController extends Controller
             $user->password = bcrypt($join_voluntary->DNI);
             $user->end_activitiest = Null;
             $user->start_activitiest = $request->start_activitiest_r;
+            $user->updated_at = $hoy;
             $user->save();
 
             //Session::flash('message', 'Modificado');

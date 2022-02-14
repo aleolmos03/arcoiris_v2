@@ -20,7 +20,8 @@
                             Modificado por
                         @endif
                         {{ current_infoUser($voluntary->created_by)->name }} {{ current_infoUser($voluntary->created_by)->last_name }} el
-                        {{ \Carbon\Carbon::parse($voluntary->updated_at)->format('d/m/Y H:i') }} hs.
+                        {{ \Carbon\Carbon::parse($voluntary->updated_at)->format('d/m/Y H:i:s') }} hs.
+
                     </span>
                     @endif
                 </h3>
