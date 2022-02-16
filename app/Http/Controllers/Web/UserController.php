@@ -9,6 +9,7 @@ use App\Models\Person;
 use App\Models\User;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
@@ -24,7 +25,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $hoy = now()->format('d/m/Y H:i:s'); // fecha actual 2020-10-29
+        // fecha actual
+        $hoy = now()->format('d/m/Y H:i:s');
+
         //--------Filtros--------
         $f_buscar = $request->get('buscar');
         $f_tblood = $request->get('tblood');
@@ -33,6 +36,8 @@ class UserController extends Controller
         $f_estado = $request->get('estado');
         $total = 0;
         $exportar = $request->get('exportar');
+
+        //dd($f_buscar,$f_tblood,$f_estado,$f_orden );
 
         $titulo = "Usuarios";
 
@@ -43,27 +48,40 @@ class UserController extends Controller
         ->join('cities', 'addresses.city_id', 'cities.id')
         ->join('provinces', 'cities.province_id', 'provinces.id');
 
-        /*if (is_numeric($f_buscar)) { // si es numero
-            if ($f_buscar < 999999) { // busca por ID
-                $join_users->where('person_users.id', '=', "$f_buscar");
-            } else { // busca por DNI
-                $usuario = PersonUser::where('person_id', current_DNI_info($f_buscar)->id)->first(); //busca el Id de paciente a aprtir del DNI
+        //FILTRO BUSCAR
+        if ($f_buscar)
+        {
+            if (is_numeric($f_buscar)) {// si es numero
 
-                if ($usuario == null) {
-                    $usuario_id = 0;
-                } else {
-                    $usuario_id = $usuario->user_id;
+                if ($f_buscar < 999999) {// busca por ID
+
+                    $join_users->where('users.id', '=', "$f_buscar");
+                }
+                else { // busca por DNI
+
+                    $join_users->where('people.DNI','=',"$f_buscar");
                 }
 
-                $join_users->where('users.id', '=', "$usuario_id");
             }
-        } else {
+            else {
 
-            $join_users->xNombre($f_buscar);
-        }*/
+                $join_users->where(DB::raw("CONCAT(people.name,' ',people.last_name)"), 'LIKE', '%'.$f_buscar.'%');
+            }
+        }
 
-        // FILTRO ESTADO - muestra activos inactivo segun select estado
-        // ver de cambar opr la I - Inativo / A- Activo
+        // FILTRO POR GRUPO SANGUINEO
+        if ($f_tblood != '')
+        {
+            $join_users->where('people.blood_type_id', '=', $f_tblood);
+        }
+
+        // FILTRO POR ROL
+        if ($f_rol != '')
+        {
+            $join_users->where('users.role_id', '=', "$f_rol");
+        }
+
+        // FILTRO POR ESTADO - muestra activos inactivo segun select estado
         if ($f_estado != '')
         {
             if ($f_estado == 1) {
@@ -73,6 +91,7 @@ class UserController extends Controller
                 $join_users->whereNotNull('users.end_activitiest');
             }
         }
+
 
         $join_users->select(
             'users.id as id',
@@ -545,35 +564,49 @@ class UserController extends Controller
         ->join('cities', 'addresses.city_id', 'cities.id')
         ->join('provinces', 'cities.province_id', 'provinces.id');
 
-        /*if (is_numeric($f_buscar)) { // si es numero
-            if ($f_buscar < 999999) { // busca por ID
-                $join_users->where('person_users.id', '=', "$f_buscar");
-            } else { // busca por DNI
-                $usuario = User::where('person_id', current_DNI_info($f_buscar)->id)->first(); //busca el Id de paciente a aprtir del DNI
+        //FILTRO BUSCAR
+        if ($f_buscar)
+        {
+            if (is_numeric($f_buscar)) {// si es numero
 
-                if ($usuario == null) {
-                    $usuario_id = 0;
-                } else {
-                    $usuario_id = $usuario->user_id;
+                if ($f_buscar < 999999) {// busca por ID
+
+                    $join_users->where('users.id', '=', "$f_buscar");
+                }
+                else { // busca por DNI
+
+                    $join_users->where('people.DNI','=',"$f_buscar");
                 }
 
-                $join_users->where('users.id', '=', "$usuario_id");
             }
-        } else {
+            else {
 
-            $join_users->xNombre($f_buscar);
+                current_buscarNombre($join_users,$f_buscar);
+            }
         }
 
+        // FILTRO POR GRUPO SANGUINEO
+        if ($f_tblood != '')
+        {
+            $join_users->where('people.blood_type_id', '=', "$f_tblood");
+        }
 
-        if ($f_estado != '') // muestra activos inactrio segun select estado
+        // FILTRO POR ROL
+        if ($f_rol != '')
+        {
+            $join_users->where('users.role_id', '=', "$f_rol");
+        }
+
+        // FILTRO POR ESTADO - muestra activos inactivo segun select estado
+        if ($f_estado != '')
         {
             if ($f_estado == 1) {
-                $join_users->whereNull('person_users.end_activitiest');
+                $join_users->whereNull('users.end_activitiest');
             }
             if ($f_estado == 2) {
-                $join_users->whereNotNull('person_users.end_activitiest');
+                $join_users->whereNotNull('users.end_activitiest');
             }
-        }*/
+        }
 
         $join_users->select(
             'users.id as id',
@@ -583,6 +616,7 @@ class UserController extends Controller
             'users.mobile1 as mobile1',
             'people.file as file',
             'people.name as name',
+            'people.state',
             'people.last_name as last_name',
             'users.email as email',
             'people.blood_type_id as tblood_id',
@@ -594,9 +628,11 @@ class UserController extends Controller
             'provinces.name as province'
         );
 
-        $total = $join_users->count(); // cuenta los resultados encontrados
+        // cuenta los resultados encontrados
+        $total = $join_users->count();
 
-        switch ($f_orden) { // ordena segun columna
+        // ordena segun columna
+        switch ($f_orden) {
             case "F_asc":
                 $join_users->orderBy('people.created_at', 'DESC');
                 break;
@@ -637,9 +673,9 @@ class UserController extends Controller
         $join_voluntary = User::where('users.id', $id)
         ->join('people','users.person_id','people.id')
         ->select(
-                'users.id',
-                'users.person_id',
-                'people.DNI'
+            'users.id',
+            'users.person_id',
+            'people.DNI'
         )
         ->first();
 

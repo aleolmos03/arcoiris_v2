@@ -29,9 +29,9 @@
                                                                         class="fas fa-caret-right"></i> @endif
                                                                 Grupo (RH):
                                                                 <select onchange="this.form.submit()" name="tblood"
-                                                                    class="bg-light btn-sm" title="Grupo Sanguíneo (Rh)">
+                                                                    class="bg-light btn-xs" title="Grupo Sanguíneo (Rh)">
                                                                     <option value="" @if ($f_tblood == '') selected @endif>
-                                                                        Todo
+                                                                        Todo  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                                                                     </option>
                                                                     @foreach (current_tbloods() as $tblood)
                                                                         <option value="{{ $tblood->id }}" @if ($tblood->id == $f_tblood) selected @endif>
@@ -43,11 +43,13 @@
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link form-group text-info btn-sm" href="#">
-                                                                @if ($f_rol != '')<i
-                                                                        class="fas fa-caret-right"></i> @endif
+                                                                @if ($f_rol != '')
+                                                                    <i class="fas fa-caret-right"></i>
+                                                                @endif
+
                                                                 Rol:
                                                                 <select onchange="this.form.submit()" name="rol"
-                                                                    class="bg-light btn-sm" title="Rol">
+                                                                    class="bg-light btn-xs" title="Rol">
                                                                     <option value="" @if ($f_rol == '') selected @endif>
                                                                         Todo
                                                                     </option>
@@ -61,11 +63,13 @@
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link form-group text-info btn-sm" href="#">
-                                                                @if ($f_estado != '')<i
-                                                                        class="fas fa-caret-right"></i> @endif
+                                                                @if ($f_estado != '')
+                                                                    <i class="fas fa-caret-right"></i>
+                                                                @endif
+
                                                                 Estado:
                                                                 <select onchange="this.form.submit()" name="estado"
-                                                                    class="bg-light btn-sm" title="estado">
+                                                                    class="bg-light btn-xs" title="estado">
                                                                     <option value="" @if ($f_estado == '') selected @endif>
                                                                         Todo
                                                                     </option>
@@ -79,23 +83,31 @@
                                                             </a>
                                                         </li>
                                                     </ul>
+
                                                 </div>
                                                 <!-- SEARCH FORM -->
-                                                <div class="input-group input-group" title="Ingrese ID, DNI o Nombre">
+                                                <div class="input-group input" title="Ingrese ID, DNI o Nombre">
                                                     <input name="buscar" class="form-control form-control-navbar-light"
-                                                        type="search" placeholder="Buscar" aria-label="Search">
+                                                        type="search" placeholder="Buscar" aria-label="Search" value= {{ $f_buscar  }}>
                                                     <div class="input-group-append">
                                                         <button class="btn btn-navbar " type="submit">
                                                             <i class="fas fa-search"></i>
                                                         </button>
                                                     </div>
                                                     &nbsp;
-                                                    <button class="navbar-toggler btn-xs" type="button"
+                                                    <button class="navbar-toggler btn-sm" type="submint"
                                                         data-toggle="collapse" data-target="#navbarTogglerDemo03"
                                                         aria-controls="navbarTogglerDemo03" aria-expanded="false"
                                                         aria-label="Toggle navigation">
                                                         <span class="navbar-toggler-icon"></span>
                                                     </button>
+                                                    &nbsp&nbsp&nbsp&nbsp
+
+                                                    <a href="/usuarios" title="Limpiar" class="text-muted-xs">
+                                                        <i class="fas fa-undo"></i>
+                                                    </a>
+
+
                                                 </div>
                                             </nav>
                                         </div>
