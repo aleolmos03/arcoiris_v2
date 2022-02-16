@@ -581,7 +581,7 @@ class UserController extends Controller
             }
             else {
 
-                current_buscarNombre($join_users,$f_buscar);
+                $join_users->where(DB::raw("CONCAT(people.name,' ',people.last_name)"), 'LIKE', '%'.$f_buscar.'%');
             }
         }
 
