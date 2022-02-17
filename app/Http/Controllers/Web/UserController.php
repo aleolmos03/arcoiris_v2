@@ -7,9 +7,10 @@ use App\Models\Address;
 use App\Models\Login;
 use App\Models\Person;
 use App\Models\User;
-use Illuminate\Contracts\Session\Session;
+//use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
@@ -36,8 +37,6 @@ class UserController extends Controller
         $f_estado = $request->get('estado');
         $total = 0;
         $exportar = $request->get('exportar');
-
-        //dd($f_buscar,$f_tblood,$f_estado,$f_orden );
 
         $titulo = "Usuarios";
 
@@ -92,7 +91,6 @@ class UserController extends Controller
             }
         }
 
-
         $join_users->select(
             'users.id as id',
             'users.start_activitiest as start_activitiest',
@@ -113,10 +111,10 @@ class UserController extends Controller
             'provinces.name as province'
         );
 
-        // cuenta los resultados encontrados
+        // TOTAL RESULTADOS ENCONTRADOS
         $total = $join_users->count();
 
-        // ordena segun columna
+        // FILTRO ORDENA POR COLUMNA
         switch ($f_orden) {
             case "F_asc":
                 $join_users->orderBy('people.created_at', 'DESC');
@@ -140,7 +138,6 @@ class UserController extends Controller
 
             $pdf = \PDF::loadView('layouts.web.Users.indexPdf', compact('person_users', 'titulo', 'f_buscar', 'f_tblood', 'f_orden', 'f_rol', 'total', 'exportar', 'f_estado'));
 
-            //return $pdf->download('ejemplo.pdf');
             return $pdf->stream($titulo . '__' . $hoy . '.pdf');
         }
         else {
@@ -217,12 +214,14 @@ class UserController extends Controller
             $user_id = User::orderBy('id', 'DESC')->first();
 
             //Session::flash('message', 'Creado');
+
             //Arma la URL para ver resumen de lo cargado
             $url = '/usuario/' . $user_id->id ;
 
-            return redirect($url); //anda*/
+            return redirect($url);
         }
-        return redirect('/usuario')->withInput(); // anda
+
+        return redirect('/usuario')->withInput();
     }
 
     /**
@@ -394,7 +393,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // fecha actual
+        // FECHA ACTUAL
         $hoy = now();
 
         //carga los Id de cada tabla a actualizar
@@ -429,7 +428,13 @@ class UserController extends Controller
             $per->updated_at = $hoy;
             $per->save();
 
-            //Session::flash('message', 'ExitoP');
+            Session::flash('message', 'Editado');
+
+            //metdodo pagina anterior
+            $end = strlen('/actualizar');
+            $url = substr(URL::current(), 0, strlen(URL::current()) - $end);
+
+            return redirect($url);
         }
 
         if ($request->guardar == '1')
@@ -472,13 +477,13 @@ class UserController extends Controller
             $user->updated_at = $hoy;
             $user->save();
 
-            //Session::flash('message', 'Modificado');
+            Session::flash('message', 'Modificado');
 
             //metdodo pagina anterior
             $end = strlen('/actualizar');
             $url = substr(URL::current(), 0, strlen(URL::current()) - $end);
 
-            return redirect($url); //anda*/
+            return redirect($url);
         }
 
         return redirect('/usuario/' . $id . '/editar')->withInput(); // anda retora si encutra dni

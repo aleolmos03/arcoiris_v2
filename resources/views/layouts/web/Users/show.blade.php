@@ -11,7 +11,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-ellipsis-v"></i>&nbsp;
-                    Información Voluntario
+                    Información Voluntario {{ Session::get('message') }}
                     @if(auth()->user()->role_id == '1')
                     <span class="users-list-date text-light">
                         @if($voluntary->created_at == $voluntary->updated_at)
@@ -464,7 +464,8 @@
             });
 
             $('.swalDefaultSuccess').ready(function() {
-                if (@json(Session::get('message')) == 'Editado') //funciona automatico
+                //if (@json(Session::get('message')) == 'Editado') //funciona automatico
+                if (Session::get('message') == 'Editado') //funciona automatico
                     Toast.fire({
                         type: 'success',
                         title: 'Usuario Editado Correctamente.' // pasa el mensaje a Json

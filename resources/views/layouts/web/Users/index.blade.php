@@ -106,8 +106,6 @@
                                                     <a href="/usuarios" title="Limpiar" class="text-muted-xs">
                                                         <i class="fas fa-undo"></i>
                                                     </a>
-
-
                                                 </div>
                                             </nav>
                                         </div>
