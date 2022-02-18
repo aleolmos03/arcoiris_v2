@@ -43,8 +43,6 @@
                                         &nbsp; Editar
                                     </a>
                                 </button>
-                            @endif
-                            @if ($voluntary->state == 'A' || $voluntary->state == 'N' )
                                 <button type="button" class="btn btn-tool bg-gradient-info btn-sm">
                                     <a type="button" data-toggle="modal" data-target="#modal-fin">
                                         <i class="far fa-trash-alt"></i>
@@ -59,6 +57,7 @@
                                     </a>
                                 </button>
                             @endif
+
                         @endif
                         <!--endif-->
                     @endif

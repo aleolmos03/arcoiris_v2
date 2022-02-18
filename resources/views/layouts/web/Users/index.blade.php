@@ -83,29 +83,27 @@
                                                             </a>
                                                         </li>
                                                     </ul>
-
                                                 </div>
                                                 <!-- SEARCH FORM -->
-                                                <div class="input-group input" title="Ingrese ID, DNI o Nombre">
-                                                    <input name="buscar" class="form-control form-control-navbar-light"
-                                                        type="search" placeholder="Buscar" aria-label="Search" value= {{ $f_buscar  }}>
+                                                <div class="input-group input-group-sm"  title="Ingrese Nº , DNI o Nombre de Usuario">
+                                                    <input name="buscar" class="form-control form-control-navbar-light" type="search"
+                                                    placeholder="Buscar" aria-label="Search" value= {{ $f_buscar  }}>
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-navbar " type="submit">
+                                                        <button class="btn btn-navbar" type="submit">
                                                             <i class="fas fa-search"></i>
                                                         </button>
+                                                        @if($f_buscar || $f_estado || $f_rol || $f_tblood )
+                                                        <a class="btn btn-navbar" href="/usuarios" title="Limpiar" class="text-muted-xs">
+                                                            <i class="fas fa-times"></i>
+                                                        </a>
+                                                        @endif
                                                     </div>
-                                                    &nbsp;
-                                                    <button class="navbar-toggler btn-sm" type="submint"
+                                                    <button class="navbar-toggler btn-xs" type="submint"
                                                         data-toggle="collapse" data-target="#navbarTogglerDemo03"
                                                         aria-controls="navbarTogglerDemo03" aria-expanded="false"
                                                         aria-label="Toggle navigation">
                                                         <span class="navbar-toggler-icon"></span>
                                                     </button>
-                                                    &nbsp&nbsp&nbsp&nbsp
-
-                                                    <a href="/usuarios" title="Limpiar" class="text-muted-xs">
-                                                        <i class="fas fa-undo"></i>
-                                                    </a>
                                                 </div>
                                             </nav>
                                         </div>
@@ -129,19 +127,19 @@
                                                                     <!--aqui va los filtros-->
                                                                     @if ($f_orden == '' || $f_orden == 'F_desc' || $f_orden == 'F_asc')
                                                                         <button type="submint" class="btn btn-xs text-muted"
-                                                                            name="orden" value="N_desc">
+                                                                            name="orden" value="N_desc" @if ($total < 2) hidden @endif>
                                                                             <i class="fas fa-sort-amount-down-alt"></i>
                                                                         </button>
                                                                     @endif
                                                                     @if ($f_orden == 'N_desc')
                                                                         <button type="submint" class="btn btn-xs text-info"
-                                                                            name="orden" value="N_asc">
+                                                                            name="orden" value="N_asc" @if ($total < 2) hidden @endif>
                                                                             <i class="fas fa-sort-amount-down-alt"></i>
                                                                         </button>
                                                                     @endif
                                                                     @if ($f_orden == 'N_asc')
                                                                         <button type="submint" class="btn btn-xs text-info"
-                                                                            name="orden" value="N_desc">
+                                                                            name="orden" value="N_desc" @if ($total < 2) hidden @endif>
                                                                             <i class="fas fa-sort-amount-up-alt"></i>
                                                                         </button>
                                                                     @endif
@@ -168,19 +166,19 @@
                                                                     <!--aqui va los filtros-->
                                                                     @if ($f_orden == '' || $f_orden == 'N_desc' || $f_orden == 'N_asc')
                                                                         <button type="submint" class="btn btn-xs text-muted"
-                                                                            name="orden" value="F_desc">
+                                                                            name="orden" value="F_desc" @if ($total < 2) hidden @endif>
                                                                             <i class="fas fa-sort-amount-down-alt"></i>
                                                                         </button>
                                                                     @endif
                                                                     @if ($f_orden == 'F_desc')
                                                                         <button type="submint" class="btn btn-xs text-info"
-                                                                            name="orden" value="F_asc">
+                                                                            name="orden" value="F_asc" @if ($total < 2) hidden @endif>
                                                                             <i class="fas fa-sort-amount-down-alt"></i>
                                                                         </button>
                                                                     @endif
                                                                     @if ($f_orden == 'F_asc')
                                                                         <button type="submint" class="btn btn-xs text-info"
-                                                                            name="orden" value="F_desc">
+                                                                            name="orden" value="F_desc" @if ($total < 2) hidden @endif>
                                                                             <i class="fas fa-sort-amount-up-alt"></i>
                                                                         </button>
                                                                     @endif
@@ -271,7 +269,7 @@
                                                 </h5>
                                             @endif
                                         </div>
-                                        @if ($total > 1)
+                                        @if ($total > 0)
                                             <div class="card-footer">
                                                 <div class="btn">
                                                     @if ($exportar != 'pdf' && $exportar != 'xls')
@@ -284,32 +282,31 @@
                                                     ])->links() }}
                                                     @endif
                                                 </div>
-
-        </form>
-        @if( auth()->user()->role_id != 3)
-        <div class="btn float-right">
-            <form method="POST" action="/usuarios/pdf/
-                            @if ($f_estado) {{ $f_estado }}@else N0 @endif/
-                            @if ($f_rol){{ $f_rol }}@else N0 @endif/
-                            @if ($f_orden){{ $f_orden }}@else N0 @endif/
-                            @if ($f_tblood){{ $f_tblood }}@else N0 @endif/
-                            @if ($f_buscar){{ $f_buscar }}@else N0 @endif
-                            ">
-                {!! csrf_field() !!}
-                <button type="submit" class="btn btn-block btn-outline-danger btn-sm-2" formtarget="_blank">
-                    <i class="far fa-file-pdf"></i> Pdf
-                </button>
-            </form>
+                                                </form>
+                                                @if( auth()->user()->role_id != 3)
+                                                    <div class="btn float-right">
+                                                        <form method="POST" action="/usuarios/pdf/
+                                                                        @if ($f_estado) {{ $f_estado }}@else N0 @endif/
+                                                                        @if ($f_rol){{ $f_rol }}@else N0 @endif/
+                                                                        @if ($f_orden){{ $f_orden }}@else N0 @endif/
+                                                                        @if ($f_tblood){{ $f_tblood }}@else N0 @endif/
+                                                                        @if ($f_buscar){{ $f_buscar }}@else N0 @endif
+                                                                        ">
+                                                            {!! csrf_field() !!}
+                                                            <button type="submit" class="btn btn-block btn-outline-danger btn-sm-2" formtarget="_blank">
+                                                                <i class="far fa-file-pdf"></i> Pdf
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                         @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        @endif
-    </div>
-    @endif
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
 @stop

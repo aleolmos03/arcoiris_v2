@@ -213,7 +213,7 @@ class UserController extends Controller
             //obtiene el id del ultimo elemto de users
             $user_id = User::orderBy('id', 'DESC')->first();
 
-            //Session::flash('message', 'Creado');
+            Session::flash('message', 'Creado');
 
             //Arma la URL para ver resumen de lo cargado
             $url = '/usuario/' . $user_id->id ;
@@ -699,8 +699,6 @@ class UserController extends Controller
             $user->end_activitiest = $request->end_activitiest;
             $user->updated_at = $hoy;
             $user->save();
-
-            //Session::flash('message', 'Modificado');
         }
         else {
 
@@ -718,14 +716,14 @@ class UserController extends Controller
             $user->start_activitiest = $request->start_activitiest_r;
             $user->updated_at = $hoy;
             $user->save();
-
-            //Session::flash('message', 'Modificado');
         }
+
+        Session::flash('message', 'Editado');
 
         //metdodo pagina anterior
         $end = strlen('/fin');
         $url = substr(URL::current(), 0, strlen(URL::current()) - $end);
 
-        return redirect($url); //anda*/
+        return redirect($url);
     }
 }
